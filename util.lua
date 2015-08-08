@@ -40,8 +40,13 @@ end
 
 -- Overrides tostring to print table contents
 function tostring(n)
-	if type(n) == "table" then
-		return "{" .. util.concat(util.map(n, tostring), ", ") .. "}"
+	if type(n) == "table"  then
+		local mt = getmetatable(n)
+		if mt ~= nil and mt.__tostring ~= nil then
+			return mt.__tostring(n)
+		else
+			return "{" .. util.concat(util.map(n, tostring), ", ") .. "}"
+		end
 	else
 		return _tostring(n)
 	end
