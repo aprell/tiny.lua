@@ -2,6 +2,14 @@
 
 A toy programming language written in Lua
 
+## TODO
+
+- [ ] Boolean expressions
+- [ ] `if` statements
+- [ ] `while`/`for` loops
+- [ ] functions and function calls
+- [ ] ...
+
 ## References
 
 - [Parsing expression grammar](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
