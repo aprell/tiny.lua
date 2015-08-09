@@ -9,6 +9,7 @@ A toy programming language written in Lua
 - [ ] `if` statements
 - [ ] `while`/`for` loops
 - [ ] Functions and function calls
+- [ ] Lexical scoping
 - [ ] ...
 
 ## References
