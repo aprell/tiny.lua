@@ -14,10 +14,20 @@ local function parse()
 	local num = R "09"
 	local alphanum = alpha + num
 	local space = S " \t\n"
+	local arith_op = S "+-*/"
+	local operator = arith_op
 
+	-- Match token
 	local function skip(tok)
 		return space ^ 0 * tok * space ^ 0
 	end
+
+	-- Capture keyword
+	local function K(name)
+		return C (P (name)) * (operator + space + -1)
+	end
+
+	local keyword = K "false" + K "true"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -27,17 +37,13 @@ local function parse()
 		P '"' * (1 - P '"') ^ 0 * P '"'
 	) / function (tok) return tok:sub(2, -2) end
 
-	local boolean = C (
-		P "true" + P "false"
-	) * (space ^ 1 + -1) / function (tok) return tok == "true" end
-
-	local operator = C (
-		S "+-*/" + S "!=" * P "=" ^ 1 + S "<>" * P "=" ^ -1
-	)
+	local boolean = (
+		K "true" + K "false"
+	) / function (tok) return tok == "true" end
 
 	local ident = C (
 		(P "_" + alpha) ^ 1 * (S "_" + alphanum) ^ 0
-	)
+	) - keyword
 
 	return P { "program",
 
