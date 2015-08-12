@@ -42,7 +42,7 @@ local function parse()
 	) / function (tok) return tok == "true" end
 
 	local ident = C (
-		(P "_" + alpha) ^ 1 * (S "_" + alphanum) ^ 0
+		(P "_" + alpha) ^ 1 * (P "_" + alphanum) ^ 0
 	) - keyword
 
 	return P { "program",
