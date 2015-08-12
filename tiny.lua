@@ -27,6 +27,10 @@ local function parse()
 		return C (P (name)) * -(alphanum + P "_")
 	end
 
+	local function parse_error()
+		raise "parse error"
+	end
+
 	local keyword = K "false" + K "true"
 
 	local number = C (
@@ -52,7 +56,8 @@ local function parse()
 			V "single_variable" +
 			V "assignment" +
 			V "arith_expr" +
-			V "comment"
+			V "comment" +
+			parse_error
 		),
 
 		literal =
