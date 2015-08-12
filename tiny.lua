@@ -65,7 +65,7 @@ local function parse()
 		),
 
 		single_number =
-			V "number" - V "number" * space ^ 0 * operator,
+			V "number" * -(skip (operator)),
 
 		string = Ct (
 			Cc "string" * string
@@ -80,7 +80,7 @@ local function parse()
 		),
 
 		single_variable =
-			V "variable" - V "variable" * space ^ 0 * (operator + "="),
+			V "variable" * -(skip (operator + "=")),
 
 		assignment = Ct (
 			Cc "assignment" * V "variable" * skip "=" *
