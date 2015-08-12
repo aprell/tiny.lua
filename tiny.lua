@@ -24,7 +24,7 @@ local function parse()
 
 	-- Capture keyword
 	local function K(name)
-		return C (P (name)) * (operator + space + -1)
+		return C (P (name)) * -(alphanum + P "_")
 	end
 
 	local keyword = K "false" + K "true"
