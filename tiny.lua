@@ -62,8 +62,8 @@ local function parse()
 
 		literal =
 			V "single_number" +
-			V "string" +
-			V "boolean",
+			V "single_string" +
+			V "single_boolean",
 
 		number = Ct (
 			Cc "number" * number
@@ -76,9 +76,15 @@ local function parse()
 			Cc "string" * string
 		),
 
+		single_string =
+			V "string" * -(skip ".."),
+
 		boolean = Ct (
 			Cc "boolean" * boolean
 		),
+
+		single_boolean =
+			V "boolean" * -(skip (operator)),
 
 		variable = Ct (
 			Cc "variable" * ident
