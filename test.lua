@@ -26,6 +26,13 @@ eval {
 	[[ 3 * (4+6) + 12 ]],  42,
 	[[ 100/10/2       ]],   5,
 
+	[[ 1 == 1          ]],  true,
+	[[ 2 >= 1+1        ]],  true,
+	[[ 4*3 < 3*4-1     ]], false,
+	[[ (10+1) * 2 > 42 ]], false,
+	[[ "hi" == "ho"    ]], false,
+	[[ true != false   ]],  true,
+
 	[[ "tiny"     ]],     "tiny",
 	[[ "lua"      ]],      "lua",
 	[[ "tiny.lua" ]], "tiny.lua",
@@ -33,11 +40,12 @@ eval {
 	[[ true  ]],  true,
 	[[ false ]], false,
 
-	[[ a           ]], nil,
-	[[ a = 1       ]],   1,
-	[[ b = 2       ]],   2,
-	[[ ab = a + b  ]],   3,
-	[[ ab = ab * 2 ]],   6,
+	[[ a              ]],   nil,
+	[[ a = 1          ]],     1,
+	[[ b = 2          ]],     2,
+	[[ ab = a + b     ]],     3,
+	[[ ab = ab * 2    ]],     6,
+	[[ c = ab > 3 * b ]], false,
 }
 
 done()

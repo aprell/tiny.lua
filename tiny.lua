@@ -15,7 +15,8 @@ local function parse()
 	local alphanum = alpha + num
 	local space = S " \t\n"
 	local arith_op = S "+-*/"
-	local operator = arith_op
+	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
+	local operator = arith_op + rel_op
 
 	-- Match token
 	local function skip(tok)
@@ -55,6 +56,7 @@ local function parse()
 			V "literal" +
 			V "single_variable" +
 			V "assignment" +
+			V "comparison" +
 			V "arith_expr" +
 			V "comment" +
 			parse_error
@@ -77,7 +79,7 @@ local function parse()
 		),
 
 		single_string =
-			V "string" * -(skip ".."),
+			V "string" * -(skip (operator + "..")),
 
 		boolean = Ct (
 			Cc "boolean" * boolean
@@ -95,7 +97,14 @@ local function parse()
 
 		assignment = Ct (
 			Cc "assignment" * V "variable" * skip "=" *
-			(V "literal" + V "single_variable" + V "arith_expr")
+			(V "literal" + V "single_variable" + V "comparison" + V "arith_expr")
+		),
+
+		comparison = Ct (
+			Cc "comparison" *
+			(V "arith_expr" + V "string" + V "boolean") *
+			skip (C (rel_op)) *
+			(V "arith_expr" + V "string" + V "boolean")
 		),
 
 		arith_expr =
@@ -132,8 +141,10 @@ local function eval(ast, env)
 		local var, val = ast[2][2], eval(ast[3], env)
 		Env.add(env, var, val)
 		return val
-	elseif ast[1] == "sum" or
-		   ast[1] == "product" then
+	elseif ast[1] == "comparison" then
+		local a, op, b = eval(ast[2], env), ast[3], eval(ast[4], env)
+		return builtin[op](a, b)
+	elseif ast[1] == "sum" or ast[1] == "product" then
 		local a = eval(ast[2], env)
 		for i = 3, #ast, 2 do
 			local op, b = ast[i], eval(ast[i+1], env)
