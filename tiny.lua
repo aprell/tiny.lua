@@ -14,24 +14,28 @@ local function parse()
 	local num = R "09"
 	local alphanum = alpha + num
 	local space = S " \t\n"
-	local arith_op = S "+-*/"
-	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
-	local operator = arith_op + rel_op
 
 	-- Match token
-	local function skip(tok)
-		return space ^ 0 * tok * space ^ 0
+	local function token(tok)
+		return space ^ 0 * C (tok) * space ^ 0
 	end
 
-	-- Capture keyword
+	-- Skip token
+	local function skip(tok)
+		return token(tok) / 0
+	end
+
+	-- Match keyword
 	local function K(name)
-		return C (P (name)) * -(alphanum + P "_")
+		return token(name * -(alphanum + P "_"))
 	end
 
 	local function parse_error()
 		raise "parse error"
 	end
 
+	local arith_op = S "+-*/"
+	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
 	local keyword = K "false" + K "true"
 
 	local number = C (
@@ -72,28 +76,28 @@ local function parse()
 		),
 
 		single_number =
-			V "number" * -(skip (operator)),
+			V "number" * -token(V "operator"),
 
 		string = Ct (
 			Cc "string" * string
 		),
 
 		single_string =
-			V "string" * -(skip (operator + "..")),
+			V "string" * -token(V "operator"),
 
 		boolean = Ct (
 			Cc "boolean" * boolean
 		),
 
 		single_boolean =
-			V "boolean" * -(skip (operator)),
+			V "boolean" * -token(V "operator"),
 
 		variable = Ct (
 			Cc "variable" * ident
 		),
 
 		single_variable =
-			V "variable" * -(skip (operator + "=")),
+			V "variable" * -token(V "operator" + "="),
 
 		assignment = Ct (
 			Cc "assignment" * V "variable" * skip "=" *
@@ -102,8 +106,7 @@ local function parse()
 
 		comparison = Ct (
 			Cc "comparison" *
-			(V "arith_expr" + V "string" + V "boolean") *
-			skip (C (rel_op)) *
+			(V "arith_expr" + V "string" + V "boolean") * token(rel_op) *
 			(V "arith_expr" + V "string" + V "boolean")
 		),
 
@@ -111,16 +114,19 @@ local function parse()
 			V "sum",
 
 		sum = Ct (
-			Cc "sum" * V "product" * (skip (C (S "+-")) * V "product") ^ 1
+			Cc "sum" * V "product" * (token(S "+-") * V "product") ^ 1
 		) + V "product",
 
 		product = Ct (
-			Cc "product" * V "factor" * (skip (C (S "*/")) * V "factor") ^ 1
+			Cc "product" * V "factor" * (token(S "*/") * V "factor") ^ 1
 		) + V "factor",
 
 		factor =
 			skip "(" * V "arith_expr" * skip ")" +
 			V "number" + V "variable",
+
+		operator =
+			arith_op + rel_op + "..",
 
 		comment =
 			skip "--" * (1 - P "\n") ^ 0,
