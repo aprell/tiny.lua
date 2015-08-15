@@ -118,7 +118,11 @@ local function parse()
 		) + V "product",
 
 		product = Ct (
-			Cc "product" * V "factor" * (token(S "*/") * V "factor") ^ 1
+			Cc "product" * V "neg" * (token(S "*/") * V "neg") ^ 1
+		) + V "neg",
+
+		neg = Ct (
+			Cc "neg" * skip "-" * V "factor"
 		) + V "factor",
 
 		factor =
@@ -157,6 +161,8 @@ local function eval(ast, env)
 			a = builtin[op](a, b)
 		end
 		return a
+	elseif ast[1] == "neg" then
+		return -eval(ast[2], env)
 	else
 		raise "eval: not implemented"
 	end
