@@ -5,7 +5,7 @@ A toy programming language written in Lua
 ## TODO
 
 - [x] Arithmetic expressions
-- [ ] Boolean expressions
+- [x] Boolean expressions
 - [ ] `if` statements
 - [ ] `while`/`for` loops
 - [ ] Functions and function calls
