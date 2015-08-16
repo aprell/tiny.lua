@@ -36,7 +36,8 @@ local function parse()
 
 	local arith_op = S "+-*/"
 	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
-	local keyword = K "false" + K "true"
+	local bool_op = K "and" + K "or" + K "not"
+	local keyword = K "and" + K "false" + K "not" + K "or" + K "true"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -60,8 +61,7 @@ local function parse()
 			V "literal" +
 			V "single_variable" +
 			V "assignment" +
-			V "comparison" +
-			V "arith_expr" +
+			V "expression" +
 			V "comment" +
 			parse_error
 		),
@@ -101,36 +101,44 @@ local function parse()
 
 		assignment = Ct (
 			Cc "assignment" * V "variable" * skip "=" *
-			(V "literal" + V "single_variable" + V "comparison" + V "arith_expr")
+			(V "literal" + V "single_variable" + V "expression")
 		),
+
+		expression =
+			V "disjunction",
+			V "comparison",
+			V "sum",
+
+		disjunction = Ct (
+			Cc "disjunction" * V "conjunction" * (K "or" * V "conjunction") ^ 1
+		) + V "conjunction",
+
+		conjunction = Ct (
+			Cc "conjunction" * V "comparison" * (K "and" * V "comparison") ^ 1
+		) + V "comparison",
 
 		comparison = Ct (
-			Cc "comparison" *
-			(V "arith_expr" + V "string" + V "boolean") * token(rel_op) *
-			(V "arith_expr" + V "string" + V "boolean")
-		),
-
-		arith_expr =
-			V "sum",
+			Cc "comparison" * V "sum" * token(rel_op) * V "sum"
+		) + V "sum",
 
 		sum = Ct (
 			Cc "sum" * V "product" * (token(S "+-") * V "product") ^ 1
 		) + V "product",
 
 		product = Ct (
-			Cc "product" * V "neg" * (token(S "*/") * V "neg") ^ 1
-		) + V "neg",
+			Cc "product" * V "negation" * (token(S "*/") * V "negation") ^ 1
+		) + V "negation",
 
-		neg = Ct (
-			Cc "neg" * skip "-" * V "factor"
+		negation = Ct (
+			Cc "negation" * (token "-" + K "not")  * V "factor"
 		) + V "factor",
 
 		factor =
-			skip "(" * V "arith_expr" * skip ")" +
-			V "number" + V "variable",
+			skip "(" * V "expression" * skip ")" +
+			V "number" + V "string" + V "boolean" + V "variable",
 
 		operator =
-			arith_op + rel_op + "..",
+			arith_op + rel_op + bool_op + "..",
 
 		comment =
 			skip "--" * (1 - P "\n") ^ 0,
@@ -161,8 +169,23 @@ local function eval(ast, env)
 			a = builtin[op](a, b)
 		end
 		return a
-	elseif ast[1] == "neg" then
-		return -eval(ast[2], env)
+	elseif ast[1] == "conjunction" or ast[1] == "disjunction" then
+		local a = eval(ast[2], env)
+		for i = 3, #ast, 2 do
+			local op = ast[i]
+			-- Short-circuit evaluation
+			if op == "and" and not a or op == "or" and a then
+				return a
+			end
+			a = eval(ast[i+1], env)
+		end
+		return a
+	elseif ast[1] == "negation" then
+		local op, a = ast[2], eval(ast[3], env)
+		if op == "not" then
+			return not a
+		end
+		return -a
 	else
 		raise "eval: not implemented"
 	end

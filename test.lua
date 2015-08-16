@@ -64,6 +64,25 @@ eval {
 	[[ c = "lua" != "tiny" ]], true,
 	[[ d = -(-a*2)/-b > a  ]], false,
 	[[ d = -ab/2*-1*b > 0  ]], true,
+
+	[[ 1 and 2              ]], 2,
+	[[ 1 and 2 or 3         ]], 2,
+	[[ "foo" or "bar"       ]], "foo",
+	[[ true and false       ]], false,
+	[[ true or false        ]], true,
+	[[ not true             ]], false,
+	[[ not false            ]], true,
+	[[ not (not false)      ]], false,
+	[[ not (not true)       ]], true,
+	[[ not (not true)       ]], true,
+	[[ not "foo" or not 1   ]], false,
+	[[ 1+2 > 3-4 and 5 < 6  ]], true,
+	[[ 1+2 > 3 or (4 and 5) ]], 5,
+	[[ e = (e or 0) + 1     ]], 1,
+	[[ e = (e or 0) + 1     ]], 2,
+	[[ e = (e or 0) + 1     ]], 3,
+	[[ e = (e >= 3) and 4   ]], 4,
+	[[ e = not 4 or e+1     ]], 5,
 }
 
 done()
