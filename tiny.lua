@@ -37,7 +37,10 @@ local function parse()
 	local arith_op = S "+-*/"
 	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
 	local bool_op = K "and" + K "or" + K "not"
-	local keyword = K "and" + K "false" + K "not" + K "or" + K "true"
+
+	local keyword =
+		K "and" + K "else" + K "elseif" + K "end" + K "false" + K "if" +
+		K "not" + K "or" + K "then" + K "true"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -62,6 +65,7 @@ local function parse()
 			V "single_variable" +
 			V "assignment" +
 			V "expression" +
+			V "conditional" +
 			V "comment" +
 			parse_error
 		),
@@ -137,6 +141,16 @@ local function parse()
 			skip "(" * V "expression" * skip ")" +
 			V "number" + V "string" + V "boolean" + V "variable",
 
+		conditional = Ct (
+			K "if" * V "expression" * K "then" * V "block" *
+			(K "elseif" * V "expression" * K "then" * V "block") ^ 0 *
+			(K "else" * V "block") ^ -1 *
+			K "end"
+		),
+
+		block =
+			V "assignment" + V "expression" + V "conditional",
+
 		operator =
 			arith_op + rel_op + bool_op + "..",
 
@@ -157,7 +171,9 @@ local function eval(ast, env)
 		return Env.lookup(env, var)
 	elseif ast[1] == "assignment" then
 		local var, val = ast[2][2], eval(ast[3], env)
-		Env.add(env, var, val)
+		if Env.update(env, var, val) == nil then
+			Env.add(env, var, val)
+		end
 		return val
 	elseif ast[1] == "comparison" then
 		local a, op, b = eval(ast[2], env), ast[3], eval(ast[4], env)
@@ -186,6 +202,22 @@ local function eval(ast, env)
 			return not a
 		end
 		return -a
+	elseif ast[1] == "if" then
+		if eval(ast[2], env) then
+			return eval(ast[4], Env.new(env))
+		end
+		for i = 5, #ast, 4 do
+			if ast[i] == "elseif" then
+				if eval(ast[i+1], env) then
+					return eval(ast[i+3], Env.new(env))
+				end
+			elseif ast[i] == "else" then
+				return eval(ast[i+1], Env.new(env))
+			else
+				assert(ast[i] == "end")
+				return nil
+			end
+		end
 	else
 		raise "eval: not implemented"
 	end

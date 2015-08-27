@@ -83,6 +83,40 @@ eval {
 	[[ e = (e or 0) + 1     ]], 3,
 	[[ e = (e >= 3) and 4   ]], 4,
 	[[ e = not 4 or e+1     ]], 5,
+
+	[[ if e > 4 then true end             ]], true,
+	[[ if e < 4 then true end             ]], nil,
+	[[ if e > 4 then true else false end  ]], true,
+	[[ if e < 4 then true else false end  ]], false,
+	[[ if e > 4 then x = 1 end            ]], 1,
+	[[ if e < 4 then x = 1 else x = 2 end ]], 2,
+	[[ if not x then a = 3 end            ]], 3,
+
+	[[ if a == 1 then
+	       a = a + 1
+	   else
+	       if a == 2 then
+	           a = a + 2
+	       else
+	           if a == 3 then
+	               a = a + 3
+	           else
+	               a = 10
+	           end
+	       end
+	   end
+	]], 6,
+
+	[[ if a == 3 then a = a + 1
+	   elseif a == 4 then a = a + 2
+	   elseif a == 5 then a = a + 3
+	   else a = 10 end
+	]], 10,
+
+	[[ if false then 1
+	   elseif false then 2
+	   elseif false then 3 end
+	]], nil,
 }
 
 done()
