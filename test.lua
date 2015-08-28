@@ -107,18 +107,21 @@ eval {
 	             end
 	         end
 	     end
-	  ]], 6 },
+	  ]], 6
+    },
 
 	{ [[ if a == 3 then a = a + 1
 	     elseif a == 4 then a = a + 2
 	     elseif a == 5 then a = a + 3
 	     else a = 10 end
-	  ]], 10 },
+	  ]], 10
+    },
 
 	{ [[ if false then 1
 	     elseif false then 2
 	     elseif false then 3 end
-	  ]], nil },
+	  ]], nil
+    },
 
 	{ [[ while a > 1 do a = a - 1 end    ]], nil },
 	{ [[ while b < 10 do b = b + a end   ]], nil },
@@ -130,9 +133,10 @@ eval {
 	{ [[ if true then
              while a+b < 10 do
                  a = a + 2
-			 end
-		 end
-      ]], nil },
+             end
+         end
+      ]], nil
+    },
 
 	{ [[ a ]], 9 },
 	{ [[ b ]], 2 },
@@ -142,9 +146,10 @@ eval {
                  a = a/b - 1
              else
                  a = a - 1
-			 end
-		 end
-      ]], nil },
+             end
+         end
+      ]], nil
+    },
 
 	{ [[ a ]], 1 },
 	{ [[ b ]], 2 },
