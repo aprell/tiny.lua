@@ -39,8 +39,8 @@ local function parse()
 	local bool_op = K "and" + K "or" + K "not"
 
 	local keyword =
-		K "and" + K "else" + K "elseif" + K "end" + K "false" + K "if" +
-		K "not" + K "or" + K "then" + K "true"
+		K "and" + K "do" + K "else" + K "elseif" + K "end" + K "false" +
+		K "if" + K "not" + K "or" + K "then" + K "true" + K "while"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -66,6 +66,7 @@ local function parse()
 			V "assignment" +
 			V "expression" +
 			V "conditional" +
+			V "loop" +
 			V "comment" +
 			parse_error
 		),
@@ -148,8 +149,12 @@ local function parse()
 			K "end"
 		),
 
+		loop = Ct (
+			K "while" * V "expression" * K "do" * V "block" * K "end"
+		),
+
 		block =
-			V "assignment" + V "expression" + V "conditional",
+			V "assignment" + V "expression" + V "conditional" + V "loop",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
@@ -218,6 +223,11 @@ local function eval(ast, env)
 				return nil
 			end
 		end
+	elseif ast[1] == "while" then
+		while eval(ast[2], env) do
+			eval(ast[4], Env.new(env))
+		end
+		return nil
 	else
 		raise "eval: not implemented"
 	end
