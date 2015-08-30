@@ -107,7 +107,7 @@ local function parse()
 
 		assignment = Ct (
 			Cc "assignment" * V "variable" * skip "=" *
-			(V "literal" + V "single_variable" + V "expression")
+			(V "literal" + V "single_variable" + V "expression" + V "conditional")
 		),
 
 		expression =
