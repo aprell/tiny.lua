@@ -67,6 +67,7 @@ local function parse()
 			V "expression" +
 			V "conditional" +
 			V "loop" +
+			V "block" +
 			V "comment" +
 			parse_error
 		),
@@ -110,8 +111,8 @@ local function parse()
 		),
 
 		expression =
-			V "disjunction",
-			V "comparison",
+			V "disjunction" +
+			V "comparison" +
 			V "sum",
 
 		disjunction = Ct (
@@ -143,9 +144,9 @@ local function parse()
 			V "number" + V "string" + V "boolean" + V "variable",
 
 		conditional = Ct (
-			K "if" * V "expression" * K "then" * V "block" *
-			(K "elseif" * V "expression" * K "then" * V "block") ^ 0 *
-			(K "else" * V "block") ^ -1 *
+			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
+			(K "elseif" * V "expression" * K "then" * (V "block" + V "expression")) ^ 0 *
+			(K "else" * (V "block" + V "expression")) ^ -1 *
 			K "end"
 		),
 
@@ -153,8 +154,14 @@ local function parse()
 			K "while" * V "expression" * K "do" * V "block" * K "end"
 		),
 
-		block =
-			V "assignment" + V "expression" + V "conditional" + V "loop",
+		block = Ct (
+			Cc "block" * V "statement" *
+			((skip ";" + skip "") * V "statement") ^ 0 *
+			((skip ";" + skip "") * V "expression") ^ -1
+		),
+
+		statement =
+			V "assignment" + V "conditional" + V "loop",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
@@ -228,6 +235,11 @@ local function eval(ast, env)
 			eval(ast[4], Env.new(env))
 		end
 		return nil
+	elseif ast[1] == "block" then
+		for i = 2, #ast-1 do
+			eval(ast[i], env)
+		end
+		return eval(ast[#ast], env)
 	else
 		raise "eval: not implemented"
 	end
