@@ -6,8 +6,9 @@ A toy programming language written in Lua
 
 - [x] Arithmetic expressions
 - [x] Boolean expressions
-- [ ] `if` statements
-- [ ] `while`/`for` loops
+- [x] `if` statements
+- [x] `while` loops
+- [ ] `for` loops
 - [ ] Functions and function calls
 - [ ] Lexical scoping
 - [ ] ...
