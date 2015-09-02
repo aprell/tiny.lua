@@ -152,6 +152,20 @@ eval {
 
 	{ [[ a ]], 1 },
 	{ [[ b ]], 2 },
+
+	{ [[ do
+             x = "x"; y = "y"
+             if x == y then
+                 true
+             else
+                 false
+             end
+         end
+      ]], false
+	},
+
+	{ [[ x ]], nil },
+	{ [[ y ]], nil },
 }
 
 done()

@@ -61,13 +61,8 @@ local function parse()
 	return P { "program",
 
 		program = space ^ 0 * Ct (
-			V "literal" +
-			V "single_variable" +
-			V "assignment" +
-			V "expression" +
-			V "conditional" +
-			V "loop" +
 			V "block" +
+			V "expression" +
 			V "comment" +
 			parse_error
 		),
@@ -154,6 +149,10 @@ local function parse()
 			K "while" * V "expression" * K "do" * V "block" * K "end"
 		),
 
+		do_block = Ct (
+			K "do" * V "block" * K "end"
+		),
+
 		block = Ct (
 			Cc "block" * V "statement" *
 			((skip ";" + skip "") * V "statement") ^ 0 *
@@ -161,7 +160,7 @@ local function parse()
 		),
 
 		statement =
-			V "assignment" + V "conditional" + V "loop",
+			V "assignment" + V "conditional" + V "loop" + V "do_block",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
@@ -235,6 +234,8 @@ local function eval(ast, env)
 			eval(ast[4], Env.new(env))
 		end
 		return nil
+	elseif ast[1] == "do" then
+		return eval(ast[2], Env.new(env))
 	elseif ast[1] == "block" then
 		for i = 2, #ast-1 do
 			eval(ast[i], env)
