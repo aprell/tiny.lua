@@ -40,7 +40,7 @@ local function parse()
 
 	local keyword =
 		K "and" + K "do" + K "else" + K "elseif" + K "end" + K "false" +
-		K "if" + K "not" + K "or" + K "then" + K "true" + K "while"
+		K "if" + K "local" + K "not" + K "or" + K "then" + K "true" + K "while"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -101,7 +101,7 @@ local function parse()
 			V "variable" * -token(V "operator" + "="),
 
 		assignment = Ct (
-			Cc "assignment" * V "variable" * skip "=" *
+			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" *
 			(V "literal" + V "single_variable" + V "expression" + V "conditional")
 		),
 
@@ -181,9 +181,15 @@ local function eval(ast, env)
 		local var = ast[2]
 		return Env.lookup(env, var)
 	elseif ast[1] == "assignment" then
-		local var, val = ast[2][2], eval(ast[3], env)
-		if Env.update(env, var, val) == nil then
+		local var, val
+		if ast[2] == "local" then
+			var, val = ast[3][2], eval(ast[4], env)
 			Env.add(env, var, val)
+		else
+			var, val = ast[2][2], eval(ast[3], env)
+			if Env.update(env, var, val) == nil then
+				Env.add(env, var, val)
+			end
 		end
 		return val
 	elseif ast[1] == "comparison" then
