@@ -288,7 +288,7 @@ if ismain() then
 	if #args > 0 then
 		for i = 1, #args do
 			local file = assert(io.open(args[i]))
-			print(eval(parse():match(file:read("*all"))))
+			eval(parse():match(file:read("*all")))
 			file:close()
 		end
 	else

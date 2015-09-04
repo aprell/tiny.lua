@@ -1,0 +1,11 @@
+a = 1
+do
+	local a = 2
+	local b = 3
+	do
+		local c = 4
+		print(a+b+c)
+	end
+	print(a+b)
+end
+print(a)
