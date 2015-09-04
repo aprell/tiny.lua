@@ -4,6 +4,7 @@ local builtin = require "tiny_builtin"
 local Env = require "tiny_env"
 local util = require "util"
 local raise, ismain = util.raise, util.ismain
+local map, slice = util.map, util.slice
 
 local lpeg = require "lpeg"
 local P, R, S, V = lpeg.P, lpeg.R, lpeg.S, lpeg.V
@@ -108,7 +109,8 @@ local function parse()
 		expression =
 			V "disjunction" +
 			V "comparison" +
-			V "sum",
+			V "sum" +
+			V "funcall",
 
 		disjunction = Ct (
 			Cc "disjunction" * V "conjunction" * (K "or" * V "conjunction") ^ 1
@@ -153,6 +155,13 @@ local function parse()
 			K "do" * V "block" * K "end"
 		),
 
+		funcall = Ct (
+			Cc "funcall" * V "variable" * skip "(" * V "funargs" * skip ")"
+		),
+
+		funargs =
+			V "expression" * (skip "," * V "expression") ^ 0,
+
 		block = Ct (
 			Cc "block" * V "statement" *
 			((skip ";" + skip "") * V "statement") ^ 0 *
@@ -160,7 +169,7 @@ local function parse()
 		),
 
 		statement =
-			V "assignment" + V "conditional" + V "loop" + V "do_block",
+			V "assignment" + V "conditional" + V "loop" + V "do_block" + V "funcall",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
@@ -247,6 +256,12 @@ local function eval(ast, env)
 			eval(ast[i], env)
 		end
 		return eval(ast[#ast], env)
+	elseif ast[1] == "funcall" then
+		local fun = eval(ast[2], env)
+		local args = map(slice(ast, 3), function (ast)
+			return eval(ast, env)
+		end)
+		return fun(unpack(args))
 	else
 		raise "eval: not implemented"
 	end

@@ -11,6 +11,12 @@ function util.map(t, fn)
 	return setmetatable(m, getmetatable(t))
 end
 
+-- Returns a slice (copy) of an array or subarray
+-- Shares metatable with original array
+function util.slice(t, i, j)
+	return setmetatable({unpack(t, i, j)}, getmetatable(t))
+end
+
 -- Overrides tostring to print table contents
 function tostring(n)
 	if type(n) == "table"  then
