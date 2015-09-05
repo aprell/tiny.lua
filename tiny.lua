@@ -156,10 +156,10 @@ local function parse()
 		),
 
 		funcall = Ct (
-			Cc "funcall" * V "variable" * skip "(" * V "funargs" * skip ")"
+			Cc "funcall" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
 		),
 
-		funargs =
+		args =
 			V "expression" * (skip "," * V "expression") ^ 0,
 
 		block = Ct (
