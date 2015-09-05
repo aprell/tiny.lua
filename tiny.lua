@@ -138,7 +138,7 @@ local function parse()
 
 		factor =
 			skip "(" * V "expression" * skip ")" +
-			V "number" + V "string" + V "boolean" + V "variable",
+			V "number" + V "string" + V "boolean" + V "funcall" + V "variable",
 
 		conditional = Ct (
 			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
