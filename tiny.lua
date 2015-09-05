@@ -99,7 +99,7 @@ local function parse()
 		),
 
 		single_variable =
-			V "variable" * -token(V "operator" + "="),
+			V "variable" * -token(V "operator" + "=" + "("),
 
 		assignment = Ct (
 			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" *
