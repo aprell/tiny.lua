@@ -1,5 +1,8 @@
 local env = {}
 
+-- Internal value of variables that are in scope but have a value of nil
+local NIL = {}
+
 local function env_tostring(env)
 	local t = {}
 	for n in pairs(env) do t[#t+1] = n end
@@ -24,7 +27,7 @@ function env.new(outer)
 end
 
 function env.add(env, var, val)
-	env[var] = val
+	env[var] = val or NIL
 end
 
 function env.update(env, var, val)
@@ -39,7 +42,9 @@ function env.update(env, var, val)
 end
 
 function env.lookup(env, var)
-	return env[var]
+	local val = env[var]
+	if val == NIL then return nil end
+	return val
 end
 
 return env

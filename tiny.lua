@@ -41,7 +41,8 @@ local function parse()
 
 	local keyword =
 		K "and" + K "do" + K "else" + K "elseif" + K "end" + K "false" +
-		K "if" + K "local" + K "not" + K "or" + K "then" + K "true" + K "while"
+		K "function" + K "if" + K "local" + K "not" + K "or" + K "then" +
+		K "true" + K "while"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -110,6 +111,7 @@ local function parse()
 			V "disjunction" +
 			V "comparison" +
 			V "sum" +
+			V "fundef" +
 			V "funcall",
 
 		disjunction = Ct (
@@ -154,6 +156,14 @@ local function parse()
 		do_block = Ct (
 			K "do" * V "block" * K "end"
 		),
+
+		fundef = Ct (
+			K "function" * skip "(" * V "params" ^ -1 * skip ")" *
+			V "block" * K "end"
+		),
+
+		params =
+			V "variable" * (skip "," * V "variable") ^ 0,
 
 		funcall = Ct (
 			Cc "funcall" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
@@ -256,6 +266,18 @@ local function eval(ast, env)
 			eval(ast[i], env)
 		end
 		return eval(ast[#ast], env)
+	elseif ast[1] == "function" then
+		return function (...)
+			local params, body = slice(ast, 2, #ast-2), ast[#ast-1]
+			local args = {...}
+			local scope = Env.new(env)
+			for i = 1, #params do
+				assert(params[i][1] == "variable")
+				local var, val = params[i][2], args[i]
+				Env.add(scope, var, val or nil)
+			end
+			return eval(body, scope)
+		end
 	elseif ast[1] == "funcall" then
 		local fun = eval(ast[2], env)
 		local args = map(slice(ast, 3), function (ast)

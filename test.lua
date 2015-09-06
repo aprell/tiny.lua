@@ -166,6 +166,46 @@ eval {
 
 { [[ x ]], nil },
 { [[ y ]], nil },
+
+{ [[ f = function ()
+         a = a + 1
+     end f()
+  ]], 2
+},
+
+{ [[ a ]], 2 },
+{ [[ b ]], 2 },
+{ [[ c ]], true },
+
+{ [[ f = function ()
+         local a = 1
+         local b = 2
+         local c = 3
+         a + b + c
+     end f()
+  ]], 6
+},
+
+{ [[ a ]], 2 },
+{ [[ b ]], 2 },
+{ [[ c ]], true },
+
+{ [[ f = function (a, b, c)
+         c = c or 3
+         a + b + c
+     end f(1, 2, 3)
+  ]], 6
+},
+
+{ [[ a ]], 2 },
+{ [[ b ]], 2 },
+{ [[ c ]], true },
+
+{ [[ f(1, 2) ]], 6 },
+
+{ [[ a ]], 2 },
+{ [[ b ]], 2 },
+{ [[ c ]], true },
 }
 
 done()
