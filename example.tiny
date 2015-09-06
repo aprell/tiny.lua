@@ -1,11 +1,16 @@
-a = 1
-do
-	local a = 2
-	local b = 3
-	do
-		local c = 4
-		print(a+b+c)
+fact_it = function (n)
+	local a = 1
+	local i = 2
+	while i <= n do
+		a = a * i
+		i = i + 1
 	end
-	print(a+b)
+	a
 end
-print(a)
+
+fact_rec = function (n)
+	if n == 0 then 1
+	else n * fact_rec(n-1) end
+end
+
+print(fact_it(10) == fact_rec(10))
