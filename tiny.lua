@@ -306,10 +306,9 @@ local function repl(prompt)
 end
 
 if ismain() then
-	local args = {...}
-	if #args > 0 then
-		for i = 1, #args do
-			local file = assert(io.open(args[i]))
+	if #arg > 0 then
+		for i = 1, #arg do
+			local file = assert(io.open(arg[i]))
 			eval(parse():match(file:read("*all")))
 			file:close()
 		end
