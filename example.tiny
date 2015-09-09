@@ -1,4 +1,4 @@
-fact_it = function (n)
+function fact_it(n)
 	local a = 1
 	local i = 2
 	while i <= n do
@@ -8,7 +8,7 @@ fact_it = function (n)
 	a
 end
 
-fact_rec = function (n)
+function fact_rec(n)
 	if n == 0 then 1
 	else n * fact_rec(n-1) end
 end

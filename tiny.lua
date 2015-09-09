@@ -35,6 +35,18 @@ local function parse()
 		raise "parse error"
 	end
 
+	local function desugar(ast)
+		if ast[1] == "function" then
+			if ast[2][1] == "variable" then
+				-- Desugar: function f() ... end
+				----------> f = function () ... end
+				local var = table.remove(ast, 2)
+				return {"assignment", var, ast}
+			end
+		end
+		return ast
+	end
+
 	local arith_op = S "+-*/"
 	local rel_op = P "==" + P "!=" + S "<>" * P "=" ^ -1
 	local bool_op = K "and" + K "or" + K "not"
@@ -158,19 +170,22 @@ local function parse()
 		),
 
 		fundef = Ct (
-			K "function" * skip "(" * V "params" ^ -1 * skip ")" *
+			K "function" * V "variable" ^ -1 *
+			skip "(" * V "params" ^ -1 * skip ")" *
 			V "block" * K "end"
-		),
+		) / desugar,
 
-		params =
-			V "variable" * (skip "," * V "variable") ^ 0,
+		params = Ct (
+			Cc "params" * V "variable" * (skip "," * V "variable") ^ 0
+		),
 
 		funcall = Ct (
 			Cc "funcall" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
 		),
 
-		args =
-			V "expression" * (skip "," * V "expression") ^ 0,
+		args = Ct (
+			Cc "args" * V "expression" * (skip "," * V "expression") ^ 0
+		),
 
 		block = Ct (
 			Cc "block" * V "statement" *
@@ -179,7 +194,12 @@ local function parse()
 		),
 
 		statement =
-			V "assignment" + V "conditional" + V "loop" + V "do_block" + V "funcall",
+			V "assignment" +
+			V "conditional" +
+			V "loop" +
+			V "do_block" +
+			V "fundef" +
+			V "funcall",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
@@ -268,7 +288,8 @@ local function eval(ast, env)
 		return eval(ast[#ast], env)
 	elseif ast[1] == "function" then
 		return function (...)
-			local params, body = slice(ast, 2, #ast-2), ast[#ast-1]
+			local params = #ast == 4 and slice(ast[2], 2) or {}
+			local body = ast[#ast-1]
 			local args = {...}
 			local scope = Env.new(env)
 			for i = 1, #params do
@@ -279,11 +300,11 @@ local function eval(ast, env)
 			return eval(body, scope)
 		end
 	elseif ast[1] == "funcall" then
-		local fun = eval(ast[2], env)
-		local args = map(slice(ast, 3), function (ast)
+		local fun = eval(ast[2], env) or raise "Undefined function"
+		local args = ast[3] and slice(ast[3], 2) or {}
+		return fun(unpack(map(args, function (ast)
 			return eval(ast, env)
-		end)
-		return fun(unpack(args))
+		end)))
 	else
 		raise "eval: not implemented"
 	end
