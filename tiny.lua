@@ -14,7 +14,8 @@ local function parse()
 	local alpha = R ("AZ", "az")
 	local num = R "09"
 	local alphanum = alpha + num
-	local space = S " \t\n"
+	local comment = P "--" * (1 - P "\n") ^ 0
+	local space = S " \t\n" + comment
 
 	-- Match token
 	local function token(tok)
@@ -77,7 +78,6 @@ local function parse()
 		program = space ^ 0 * Ct (
 			V "block" +
 			V "expression" +
-			V "comment" +
 			parse_error
 		),
 
@@ -203,9 +203,6 @@ local function parse()
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
-
-		comment =
-			skip "--" * (1 - P "\n") ^ 0,
 
 	} / unpack
 end
