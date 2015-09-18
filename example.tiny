@@ -1,9 +1,7 @@
 function fact_it(n)
 	local a = 1
-	local i = 2
-	while i <= n do
+	for i = 2, n do
 		a = a * i
-		i = i + 1
 	end
 	a
 end
