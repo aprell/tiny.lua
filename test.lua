@@ -153,6 +153,14 @@ eval {
 { [[ a ]], 1 },
 { [[ b ]], 2 },
 
+{ [[ for i = 1,1 do a = a + i end   ]], nil },
+{ [[ for i = 1,2 do a = a - i end   ]], nil },
+{ [[ for i = 1,3 do a = a + i end   ]], nil },
+{ [[ for i = -1,-4 do a = a - i end ]], nil },
+{ [[ for i = -1,+4 do a = a + i end ]], nil },
+
+{ [[ a = a - 13 ]], 1 },
+
 { [[ do
          x = "x"; y = "y"
          if x == y then

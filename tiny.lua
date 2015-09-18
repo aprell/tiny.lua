@@ -44,6 +44,27 @@ local function parse()
 				local var = table.remove(ast, 2)
 				return {"assignment", var, ast}
 			end
+		elseif ast[1] == "for" then
+			-- Desugar: for i = a, b do ... end
+			---------->
+			-- do
+			--     local i = a
+			--     while i <= b do
+			--         ...
+			--         i = i + 1
+			--     end
+			-- end
+			local assign = {"assignment", "local", ast[2], ast[3]}
+			local test = {"comparison", ast[2], "<=", ast[4]}
+			local inc = {"assignment", ast[2], {"sum", ast[2], "+", {"number", 1}}}
+			local body = ast[6]
+			table.insert(body, inc)
+			return {
+				"do", {
+					"block", assign, {"while", test, "do", body, "end"}
+				},
+				"end"
+			}
 		end
 		return ast
 	end
@@ -54,8 +75,8 @@ local function parse()
 
 	local keyword =
 		K "and" + K "do" + K "else" + K "elseif" + K "end" + K "false" +
-		K "function" + K "if" + K "local" + K "not" + K "or" + K "then" +
-		K "true" + K "while"
+		K "for" + K "function" + K "if" + K "local" + K "not" + K "or" +
+		K "return" + K "then" + K "true" + K "while"
 
 	local number = C (
 		S "+-" ^ -1 * num ^ 1 * (P "." * num ^ 0) ^ -1
@@ -161,9 +182,15 @@ local function parse()
 			K "end"
 		),
 
-		loop = Ct (
+		while_loop = Ct (
 			K "while" * V "expression" * K "do" * V "block" * K "end"
 		),
+
+		for_loop = Ct (
+			K "for" * V "variable" * skip "=" *
+			V "expression" * skip "," * V "expression" *
+			K "do" * V "block" * K "end"
+		) / desugar,
 
 		do_block = Ct (
 			K "do" * V "block" * K "end"
@@ -196,7 +223,8 @@ local function parse()
 		statement =
 			V "assignment" +
 			V "conditional" +
-			V "loop" +
+			V "while_loop" +
+			V "for_loop" +
 			V "do_block" +
 			V "fundef" +
 			V "funcall",
