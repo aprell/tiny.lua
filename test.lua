@@ -3,19 +3,24 @@
 local tiny = require "tiny"
 local util = require "util"
 local check = util.check.equal
-local done = util.check.report
+local report = util.check.report
 
 tiny = tiny.parse() / tiny.eval
 
-local function eval(test)
-	for i = 1, #test do
-		check(tiny:match(test[i][1]), test[i][2])
+local function test(t)
+	for i = 1, #t do
+		check(tiny:match(t[i][1]), t[i][2])
 	end
+	report()
 end
 
--- eval { { [[ code ]], expected result } }
+-- test {
+--   { [[ code ]], expected result },
+--   { ... }
+-- }
 
-eval {
+test {
+
 { [[     1 ]], 1 },
 { [[    -2 ]], -2 },
 { [[  3.14 ]], 3.14 },
@@ -214,6 +219,5 @@ eval {
 { [[ a ]], 2 },
 { [[ b ]], 2 },
 { [[ c ]], true },
-}
 
-done()
+} -- End of test
