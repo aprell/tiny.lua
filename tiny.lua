@@ -5,6 +5,7 @@ local Env = require "tiny_env"
 local util = require "util"
 local raise, ismain = util.raise, util.ismain
 local map, slice = util.map, util.slice
+local unpack = unpack or table.unpack
 
 local lpeg = require "lpeg"
 local P, R, S, V = lpeg.P, lpeg.R, lpeg.S, lpeg.V

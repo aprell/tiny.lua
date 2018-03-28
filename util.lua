@@ -1,5 +1,6 @@
 local util = {}
 local _tostring = tostring
+local unpack = unpack or table.unpack
 
 -- Applies a function to every element of an array
 -- Shares metatable with original array
