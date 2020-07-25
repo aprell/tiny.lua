@@ -11,20 +11,23 @@ function string.dirname(path)
 	return dirname(path, #path)
 end
 
-package.path = arg[0]:dirname() .. "../src/?.lua;" .. package.path
+local dirname = arg[0]:dirname()
 
+package.path = dirname .. "../src/?.lua;" .. package.path
+package.path = dirname .. "?.lua;" .. package.path
+
+local check = require "check"
 local core = require "core"
-local utils = require "utils"
 
 local tiny = core.parse() / core.eval
 
 local TEST = function (code)
 	return function (value)
-		utils.check.equal(tiny:match(code), value)
+		check.equal(tiny:match(code), value)
 	end
 end
 
-local TEST_REPORT = utils.check.report
+local TEST_REPORT = check.report
 
 TEST
 ----
