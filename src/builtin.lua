@@ -1,4 +1,4 @@
-local Env = require "tiny_env"
+local Env = require "env"
 
 local builtin = Env.new()
 

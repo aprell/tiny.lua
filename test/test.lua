@@ -1,17 +1,30 @@
 #!/usr/bin/env lua
 
-local tiny = require "tiny"
-local util = require "util"
+function string.dirname(path)
+	local function dirname(path, index)
+		if string.char(path:byte(index)) == "/" then
+			return path:sub(0, index)
+		else
+			return dirname(path, index - 1)
+		end
+	end
+	return dirname(path, #path)
+end
 
-tiny = tiny.parse() / tiny.eval
+package.path = arg[0]:dirname() .. "../src/?.lua;" .. package.path
+
+local core = require "core"
+local utils = require "utils"
+
+local tiny = core.parse() / core.eval
 
 local TEST = function (code)
 	return function (value)
-		util.check.equal(tiny:match(code), value)
+		utils.check.equal(tiny:match(code), value)
 	end
 end
 
-local TEST_REPORT = util.check.report
+local TEST_REPORT = utils.check.report
 
 TEST
 ----

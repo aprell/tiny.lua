@@ -1,10 +1,8 @@
-#!/usr/bin/env lua
-
-local builtin = require "tiny_builtin"
-local Env = require "tiny_env"
-local util = require "util"
-local raise, ismain = util.raise, util.ismain
-local map, slice = util.map, util.slice
+local builtin = require "builtin"
+local Env = require "env"
+local utils = require "utils"
+local raise = utils.raise
+local map, slice = utils.map, utils.slice
 local unpack = unpack or table.unpack
 
 local lpeg = require "lpeg"
@@ -352,16 +350,8 @@ local function repl(prompt)
 	end
 end
 
-if ismain() then
-	if #arg > 0 then
-		for i = 1, #arg do
-			local file = assert(io.open(arg[i]))
-			eval(parse():match(file:read("*all")))
-			file:close()
-		end
-	else
-		repl()
-	end
-else
-	return {parse = parse, eval = eval}
-end
+return {
+	parse = parse,
+	eval = eval,
+	repl = repl
+}

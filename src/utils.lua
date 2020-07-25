@@ -1,10 +1,10 @@
-local util = {}
+local utils = {}
 local _tostring = tostring
 local unpack = unpack or table.unpack
 
 -- Applies a function to every element of an array
 -- Shares metatable with original array
-function util.map(t, fn)
+function utils.map(t, fn)
 	local m = {}
 	for _, v in ipairs(t) do
 		table.insert(m, (fn(v)))
@@ -14,7 +14,7 @@ end
 
 -- Returns a slice (copy) of an array or subarray
 -- Shares metatable with original array
-function util.slice(t, i, j)
+function utils.slice(t, i, j)
 	return setmetatable({unpack(t, i, j)}, getmetatable(t))
 end
 
@@ -25,7 +25,7 @@ function tostring(n)
 		if mt ~= nil and mt.__tostring ~= nil then
 			return mt.__tostring(n)
 		else
-			return "{" .. table.concat(util.map(n, tostring), ", ") .. "}"
+			return "{" .. table.concat(utils.map(n, tostring), ", ") .. "}"
 		end
 	else
 		return _tostring(n)
@@ -33,13 +33,24 @@ function tostring(n)
 end
 
 -- Raises an error with message err_msg
-function util.raise(err_msg)
+function utils.raise(err_msg)
 	local err_mt = {__tostring = function (err) return err.reason end}
 	return error(setmetatable({reason = err_msg}, err_mt))
 end
 
-function util.ismain()
+function utils.ismain()
 	return not debug.getinfo(4)
+end
+
+function string.dirname(path)
+	local function dirname(path, index)
+		if string.char(path:byte(index)) == "/" then
+			return path:sub(0, index)
+		else
+			return dirname(path, index - 1)
+		end
+	end
+	return dirname(path, #path)
 end
 
 local check = { failed = 0, total = 0 }
@@ -118,6 +129,6 @@ function check.report()
 	end
 end
 
-util.check = check
+utils.check = check
 
-return util
+return utils
