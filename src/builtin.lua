@@ -1,6 +1,6 @@
 local Env = require "env"
 
-local builtin = Env.new()
+local builtin = Env()
 
 for sym, val in pairs {
 
@@ -18,6 +18,6 @@ for sym, val in pairs {
 
 	["print"] = print,
 
-} do Env.add(builtin, sym, val) end
+} do builtin:add(sym, val) end
 
 return builtin

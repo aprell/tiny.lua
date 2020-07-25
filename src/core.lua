@@ -242,16 +242,16 @@ local function eval(ast, env)
 		return ast[2]
 	elseif ast[1] == "variable" then
 		local var = ast[2]
-		return Env.lookup(env, var)
+		return env:lookup(var)
 	elseif ast[1] == "assignment" then
 		local var, val
 		if ast[2] == "local" then
 			var, val = ast[3][2], eval(ast[4], env)
-			Env.add(env, var, val)
+			env:add(var, val)
 		else
 			var, val = ast[2][2], eval(ast[3], env)
-			if Env.update(env, var, val) == nil then
-				Env.add(env, var, val)
+			if env:update(var, val) == nil then
+				env:add(var, val)
 			end
 		end
 		return val
@@ -284,15 +284,15 @@ local function eval(ast, env)
 		return -a
 	elseif ast[1] == "if" then
 		if eval(ast[2], env) then
-			return eval(ast[4], Env.new(env))
+			return eval(ast[4], Env(env))
 		end
 		for i = 5, #ast, 4 do
 			if ast[i] == "elseif" then
 				if eval(ast[i+1], env) then
-					return eval(ast[i+3], Env.new(env))
+					return eval(ast[i+3], Env(env))
 				end
 			elseif ast[i] == "else" then
-				return eval(ast[i+1], Env.new(env))
+				return eval(ast[i+1], Env(env))
 			else
 				assert(ast[i] == "end")
 				return nil
@@ -300,11 +300,11 @@ local function eval(ast, env)
 		end
 	elseif ast[1] == "while" then
 		while eval(ast[2], env) do
-			eval(ast[4], Env.new(env))
+			eval(ast[4], Env(env))
 		end
 		return nil
 	elseif ast[1] == "do" then
-		return eval(ast[2], Env.new(env))
+		return eval(ast[2], Env(env))
 	elseif ast[1] == "block" then
 		for i = 2, #ast-1 do
 			eval(ast[i], env)
@@ -315,11 +315,11 @@ local function eval(ast, env)
 			local params = #ast == 4 and slice(ast[2], 2) or {}
 			local body = ast[#ast-1]
 			local args = {...}
-			local scope = Env.new(env)
+			local scope = Env(env)
 			for i = 1, #params do
 				assert(params[i][1] == "variable")
 				local var, val = params[i][2], args[i]
-				Env.add(scope, var, val or nil)
+				scope:add(var, val or nil)
 			end
 			return eval(body, scope)
 		end

@@ -1,39 +1,48 @@
-local env = {}
+local Env = {}
+
+local obj_mt = {
+	__index = Env,
+	__tostring = function (env)
+		local t = {}
+		for n in pairs(env) do t[#t+1] = n end
+		table.sort(t)
+		local s = "{\n"
+		for i = 1, #t do
+			s = s .. "  " .. t[i] .. " = " .. tostring(env[t[i]]) .. "\n"
+		end
+		s = s .. "}"
+		return s
+	end
+}
+
+local class_mt = {
+	__call = function (_, env)
+		-- Top-level environment is empty (no globals)
+		env = env or {}
+		local mt = {
+			outer = env,
+			__index = obj_mt.__index,
+			__tostring = obj_mt.__tostring
+		}
+		return setmetatable({}, mt)
+	end
+}
 
 -- Internal value of variables that are in scope but have a value of nil
 local NIL = {}
 
-local function env_tostring(env)
-	local t = {}
-	for n in pairs(env) do t[#t+1] = n end
-	table.sort(t)
-	local s = "{\n"
-	for i = 1, #t do
-		s = s .. "  " .. t[i] .. " = " .. tostring(env[t[i]]) .. "\n"
-	end
-	s = s .. "}"
-	return s
+function Env:add(var, val)
+	self[var] = val or NIL
 end
 
-function env.new(outer)
-	-- Top-level environment is empty (no globals)
-	outer = outer or {}
-	local mt = {
-		outer = outer,
-		__index = outer,
-		__tostring = env_tostring
-	}
-	return setmetatable({}, mt)
-end
-
-function env.add(env, var, val)
-	env[var] = val or NIL
-end
-
-function env.update(env, var, val)
+function Env:update(var, new_val)
+	local env = self
 	while env ~= nil do
-		local v = rawget(env, var)
-		if v ~= nil then rawset(env, var, val); return val end
+		local val = rawget(env, var)
+		if val ~= nil then
+			rawset(env, var, new_val)
+			return new_val
+		end
 		local mt = getmetatable(env)
 		if not mt then return nil end
 		env = mt.outer
@@ -41,10 +50,17 @@ function env.update(env, var, val)
 	return nil
 end
 
-function env.lookup(env, var)
-	local val = env[var]
-	if val == NIL then return nil end
-	return val
+function Env:lookup(var)
+	local env = self
+	while env ~= nil do
+		local val = rawget(env, var)
+		if val == NIL then return nil end
+		if val ~= nil then return val end
+		local mt = getmetatable(env)
+		if not mt then return nil end
+		env = mt.outer
+	end
+	return nil
 end
 
-return env
+return setmetatable(Env, class_mt)
