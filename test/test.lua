@@ -1,20 +1,6 @@
 #!/usr/bin/env lua
 
-function string.dirname(path)
-	local function dirname(path, index)
-		if string.char(path:byte(index)) == "/" then
-			return path:sub(0, index)
-		else
-			return dirname(path, index - 1)
-		end
-	end
-	return dirname(path, #path)
-end
-
-local dirname = arg[0]:dirname()
-
-package.path = dirname .. "../src/?.lua;" .. package.path
-package.path = dirname .. "?.lua;" .. package.path
+package.path = "../src/?.lua;" .. package.path
 
 local check = require "check"
 local core = require "core"
