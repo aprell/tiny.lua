@@ -5,490 +5,564 @@ package.path = "../src/?.lua;" .. package.path
 local check = require "check"
 local core = require "core"
 
-local tiny = core.parse() / core.eval
+local parse = core.parse()
+local eval = core.eval
 
 local TEST = function (code)
-	return function (value)
-		check.equal(tiny:match(code), value)
+	return function (expected_ast)
+		local actual_ast = parse:match(code)
+		if expected_ast ~= nil then
+			check.equal(actual_ast, expected_ast)
+		end
+		return function (expected_value)
+			check.equal(eval(actual_ast), expected_value)
+		end
 	end
 end
-
-local TEST_REPORT = check.report
 
 TEST
 ----
 [[
     1
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     -2
 ]]
-    ( -2 )
+( pass )
+( -2 )
 
 TEST
 ----
 [[
     3.14
 ]]
-    ( 3.14 )
+( pass )
+( 3.14 )
 
 TEST
 ----
 [[
     -4.50
 ]]
-    ( -4.50 )
+( pass )
+( -4.50 )
 
 TEST
 ----
 [[
     "foo"
 ]]
-    ( "foo" )
+( pass )
+( "foo" )
 
 TEST
 ----
 [[
     "foo bar"
 ]]
-    ( "foo bar" )
+( pass )
+( "foo bar" )
 
 TEST
 ----
 [[
     "tiny.lua"
 ]]
-    ( "tiny.lua" )
+( pass )
+( "tiny.lua" )
 
 TEST
 ----
 [[
     true
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     false
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     1 + 2
 ]]
-    ( 3 )
+( pass )
+( 3 )
 
 TEST
 ----
 [[
     1 - 2
 ]]
-    ( -1 )
+( pass )
+( -1 )
 
 TEST
 ----
 [[
     1 * 2
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     1 / 2
 ]]
-    ( 0.5 )
+( pass )
+( 0.5 )
 
 TEST
 ----
 [[
     1 + 2 + 3
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
 [[
     1 + 2 - 3
 ]]
-    ( 0 )
+( pass )
+( 0 )
 
 TEST
 ----
 [[
     1 + 2 * 3
 ]]
-    ( 7 )
+( pass )
+( 7 )
 
 TEST
 ----
 [[
     (1 + 2) * 3
 ]]
-    ( 9 )
+( pass )
+( 9 )
 
 TEST
 ----
 [[
     (1 + 2) / 3
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     1 + 2 * 3 + 4
 ]]
-    ( 11 )
+( pass )
+( 11 )
 
 TEST
 ----
 [[
     (1 + 2) * (3 + 4)
 ]]
-    ( 21 )
+( pass )
+( 21 )
 
 TEST
 ----
 [[
     (1 + 2) * (-3 + 4)
 ]]
-    ( 3 )
+( pass )
+( 3 )
 
 TEST
 ----
 [[
     -(-1)
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     -(-(-1) + 2)
 ]]
-    ( -3 )
+( pass )
+( -3 )
+
 TEST
 ----
 [[
     -(-(-1) -(-1))
 ]]
-    ( -2 )
+( pass )
+( -2 )
 
 TEST
 ----
 [[
     -1 * -2 * -3 / -3
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     -1 * -(2 * -3) / -3
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     1 == 1
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     2 != 3
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     1 + 2 >= 2 + 3
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     2 + 3 <= 1 + 2
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     "foo" > "bar"
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     "foo" < "bar"
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     "true" != "false"
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     a
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     a = 1
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     b = 2
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     ab = a + b
 ]]
-    ( 3 )
+( pass )
+( 3 )
 
 TEST
 ----
 [[
     ab = ab * 2
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
 [[
     c = ab > 2 * (b + 1)
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     c = "lua" != "tiny"
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     d = -(-a * 2) / -b > a
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     d = -ab / 2 * -1 * b > 0
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     1 and 2
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     1 and 2 or 3
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     "foo" or "bar"
 ]]
-    ( "foo" )
+( pass )
+( "foo" )
 
 TEST
 ----
 [[
     true and false
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     true or false
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     not true
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     not false
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     not (not false)
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     not (not true)
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     not "foo" or not 1
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     1+2 > 3-4 and 5 < 6
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     1+2 > 3 or (4 and 5)
 ]]
-    ( 5 )
+( pass )
+( 5 )
 
 TEST
 ----
 [[
     e = (e or 0) + 1
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     e = (e or 0) + 1
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     e = (e or 0) + 1
 ]]
-    ( 3 )
+( pass )
+( 3 )
 
 TEST
 ----
 [[
     e = (e >= 3) and 4
 ]]
-    ( 4 )
+( pass )
+( 4 )
 
 TEST
 ----
 [[
     e = not 4 or e+1
 ]]
-    ( 5 )
+( pass )
+( 5 )
 
 TEST
 ----
 [[
     a = 1
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     b = 2
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     if a > 0 then true end
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     if a < 0 then true end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     if a > 0 then true else false end
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     if a < 0 then true else false end
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     if a > 0 then x = 1 end
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     if a < 0 then x = 1 else x = 2 end
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     if not x then a = 3 end
 ]]
-    ( 3 )
+( pass )
+( 3 )
 
 TEST
 ----
@@ -507,7 +581,8 @@ TEST
         end
     end
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
@@ -517,7 +592,8 @@ TEST
     elseif a == 5 then a = a + 3
     else a = 10 end
 ]]
-    ( 10 )
+( pass )
+( 10 )
 
 TEST
 ----
@@ -526,35 +602,40 @@ TEST
     elseif false then 2
     elseif false then 3 end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     while a > 1 do a = a - 1 end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     while b < 10 do b = b + a end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     while a != b - 1 do b = b - 1 end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     while a == b + 1 do b = false end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
@@ -566,21 +647,24 @@ TEST
         end
     end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 9 )
+( pass )
+( 9 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
@@ -592,63 +676,72 @@ TEST
         a = a - 1
     end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     for i = 1, 1 do a = a + i end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     for i = 1, 2 do a = a - i end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     for i = 1, 3 do a = a + i end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     for i = -1, -4 do a = a - i end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     for i = -1, +4 do a = a + i end
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     a = a - 13
 ]]
-    ( 1 )
+( pass )
+( 1 )
 
 TEST
 ----
@@ -662,21 +755,24 @@ TEST
         end
     end
 ]]
-    ( false )
+( pass )
+( false )
 
 TEST
 ----
 [[
     x
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
 [[
     y
 ]]
-    ( nil )
+( pass )
+( nil )
 
 TEST
 ----
@@ -685,28 +781,32 @@ TEST
         a = a + 1
     end f()
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     c
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
@@ -718,28 +818,32 @@ TEST
         a + b + c
     end f()
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     c
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
@@ -749,56 +853,64 @@ TEST
         a + b + c
     end f(1, 2, 3)
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     c
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
 [[
     f(1, 2)
 ]]
-    ( 6 )
+( pass )
+( 6 )
 
 TEST
 ----
 [[
     a
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     b
 ]]
-    ( 2 )
+( pass )
+( 2 )
 
 TEST
 ----
 [[
     c
 ]]
-    ( true )
+( pass )
+( true )
 
 TEST
 ----
@@ -813,8 +925,25 @@ TEST
         end
     end a = f(); a()
 ]]
-    ( 12 )
+( pass )
+( 12 )
 
---=============--
-  TEST_REPORT()
---=============--
+TEST
+----
+[[
+    function f()
+        local a = 1
+        function ()
+            while a < 10 do
+                a = a + 1
+            end
+            a + b
+        end
+    end a = f(); a()
+]]
+( pass )
+( 12 )
+
+--------------
+check.report()
+--------------
