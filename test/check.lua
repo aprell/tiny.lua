@@ -23,8 +23,16 @@ end
 -- Returns true if a is a subset of b
 local function subset(a, b)
 	for k, v in pairs(a) do
-		if b[k] ~= v then
-			return false
+		if type(v) == "table" then
+			if type(b[k]) ~= "table" then
+				return false
+			elseif not subset(v, b[k]) then
+				return false
+			end
+		else
+			if b[k] ~= v then
+				return false
+			end
 		end
 	end
 	return true
