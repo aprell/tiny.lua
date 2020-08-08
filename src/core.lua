@@ -101,45 +101,29 @@ local function parse()
 			parse_error
 		),
 
-		literal =
-			V "single_number" +
-			V "single_string" +
-			V "single_boolean",
-
 		number = Ct (
 			Cc "number" * number
 		),
-
-		single_number =
-			V "number" * -token(V "operator"),
 
 		string = Ct (
 			Cc "string" * string
 		),
 
-		single_string =
-			V "string" * -token(V "operator"),
-
 		boolean = Ct (
 			Cc "boolean" * boolean
 		),
 
-		single_boolean =
-			V "boolean" * -token(V "operator"),
+		literal =
+			V "number" +
+			V "string" +
+			V "boolean",
 
 		variable = Ct (
 			Cc "variable" * ident
 		),
 
-		single_variable =
-			V "variable" * -token(V "operator" + "=" + "("),
-
-		assignment = Ct (
-			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" *
-			(V "literal" + V "single_variable" + V "expression" + V "conditional")
-		),
-
 		expression =
+			V "conditional" +
 			V "disjunction" +
 			V "comparison" +
 			V "sum" +
@@ -171,8 +155,21 @@ local function parse()
 		) + V "atom",
 
 		atom =
-			V "number" + V "string" + V "boolean" + V "funcall" + V "variable" +
+			V "literal" + V "funcall" + V "variable" +
 			skip "(" * V "expression" * skip ")",
+
+		statement =
+			V "assignment" +
+			V "conditional" +
+			V "while_loop" +
+			V "for_loop" +
+			V "do_block" +
+			V "fundef" +
+			V "funcall",
+
+		assignment = Ct (
+			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" * V "expression"
+		),
 
 		conditional = Ct (
 			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
@@ -218,15 +215,6 @@ local function parse()
 			((skip ";" + skip "") * V "statement") ^ 0 *
 			((skip ";" + skip "") * V "expression") ^ -1
 		),
-
-		statement =
-			V "assignment" +
-			V "conditional" +
-			V "while_loop" +
-			V "for_loop" +
-			V "do_block" +
-			V "fundef" +
-			V "funcall",
 
 		operator =
 			arith_op + rel_op + bool_op + "..",
