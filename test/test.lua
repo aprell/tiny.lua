@@ -33,7 +33,9 @@ TEST
 [[
     -2
 ]]
-{ "unary", "-", { "number", 2 } }
+{ "unary", "-",
+  { "number", 2 }
+}
 ( -2 )
 
 TEST
@@ -49,7 +51,9 @@ TEST
 [[
     -4.50
 ]]
-{ "unary", "-", { "number", 4.50 } }
+{ "unary", "-",
+  { "number", 4.50 }
+}
 ( -4.50 )
 
 TEST
@@ -97,7 +101,10 @@ TEST
 [[
     1 + 2
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "+",
+  { "number", 2 }
+}
 ( 3 )
 
 TEST
@@ -105,7 +112,10 @@ TEST
 [[
     1 - 2
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "-",
+  { "number", 2 }
+}
 ( -1 )
 
 TEST
@@ -113,7 +123,10 @@ TEST
 [[
     1 * 2
 ]]
-( pass )
+{ "product",
+  { "number", 1 }, "*",
+  { "number", 2 }
+}
 ( 2 )
 
 TEST
@@ -121,7 +134,10 @@ TEST
 [[
     1 / 2
 ]]
-( pass )
+{ "product",
+  { "number", 1 }, "/",
+  { "number", 2 }
+}
 ( 0.5 )
 
 TEST
@@ -129,7 +145,11 @@ TEST
 [[
     1 + 2 + 3
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "+",
+  { "number", 2 }, "+",
+  { "number", 3 }
+}
 ( 6 )
 
 TEST
@@ -137,7 +157,11 @@ TEST
 [[
     1 + 2 - 3
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "+",
+  { "number", 2 }, "-",
+  { "number", 3 }
+}
 ( 0 )
 
 TEST
@@ -145,7 +169,13 @@ TEST
 [[
     1 + 2 * 3
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "+",
+  { "product",
+    { "number", 2 }, "*",
+    { "number", 3 }
+  }
+}
 ( 7 )
 
 TEST
@@ -153,7 +183,13 @@ TEST
 [[
     (1 + 2) * 3
 ]]
-( pass )
+{ "product",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }, "*",
+  { "number", 3 }
+}
 ( 9 )
 
 TEST
@@ -161,7 +197,13 @@ TEST
 [[
     (1 + 2) / 3
 ]]
-( pass )
+{ "product",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }, "/",
+  { "number", 3 }
+}
 ( 1 )
 
 TEST
@@ -169,7 +211,14 @@ TEST
 [[
     1 + 2 * 3 + 4
 ]]
-( pass )
+{ "sum",
+  { "number", 1 }, "+",
+  { "product",
+    { "number", 2 }, "*",
+    { "number", 3 }
+  }, "+",
+  { "number", 4 }
+}
 ( 11 )
 
 TEST
@@ -177,7 +226,16 @@ TEST
 [[
     (1 + 2) * (3 + 4)
 ]]
-( pass )
+{ "product",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }, "*",
+  { "sum",
+    { "number", 3 }, "+",
+    { "number", 4 }
+  }
+}
 ( 21 )
 
 TEST
@@ -185,7 +243,18 @@ TEST
 [[
     (1 + 2) * (-3 + 4)
 ]]
-( pass )
+{ "product",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }, "*",
+  { "sum",
+    { "unary", "-",
+      { "number", 3 }
+    }, "+",
+    { "number", 4 }
+  }
+}
 ( 3 )
 
 TEST
@@ -193,7 +262,11 @@ TEST
 [[
     -(-1)
 ]]
-{ "unary", "-", { "unary", "-", { "number", 1 } } }
+{ "unary", "-",
+  { "unary", "-",
+    { "number", 1 }
+  }
+}
 ( 1 )
 
 TEST
@@ -201,7 +274,16 @@ TEST
 [[
     -(-(-1) + 2)
 ]]
-( pass )
+{ "unary", "-",
+  { "sum",
+    { "unary", "-",
+      { "unary", "-",
+        { "number", 1 }
+      }
+    }, "+",
+    { "number", 2 }
+  }
+}
 ( -3 )
 
 TEST
@@ -209,7 +291,18 @@ TEST
 [[
     -(-(-1) -(-1))
 ]]
-( pass )
+{ "unary", "-",
+  { "sum",
+    { "unary", "-",
+      { "unary", "-",
+        { "number", 1 }
+      }
+    }, "-",
+    { "unary", "-",
+      { "number", 1 }
+    }
+  }
+}
 ( -2 )
 
 TEST
@@ -217,7 +310,20 @@ TEST
 [[
     -1 * -2 * -3 / -3
 ]]
-( pass )
+{ "product",
+  { "unary", "-",
+    { "number", 1 }
+  }, "*",
+  { "unary", "-",
+    { "number", 2 }
+  }, "*",
+  { "unary", "-",
+    { "number", 3 }
+  }, "/",
+  { "unary", "-",
+    { "number", 3 }
+  }
+}
 ( 2 )
 
 TEST
@@ -225,7 +331,22 @@ TEST
 [[
     -1 * -(2 * -3) / -3
 ]]
-( pass )
+{ "product",
+  { "unary", "-",
+    { "number", 1 }
+  }, "*",
+  { "unary", "-",
+    { "product",
+      { "number", 2 }, "*",
+      { "unary", "-",
+        { "number", 3 }
+      }
+    }
+  }, "/",
+  { "unary", "-",
+    { "number", 3 }
+  }
+}
 ( 2 )
 
 TEST
@@ -401,7 +522,9 @@ TEST
 [[
     not true
 ]]
-{ "unary", "not", { "boolean", true } }
+{ "unary", "not",
+  { "boolean", true }
+}
 ( false )
 
 TEST
@@ -409,7 +532,9 @@ TEST
 [[
     not false
 ]]
-{ "unary", "not", { "boolean", false } }
+{ "unary", "not",
+  { "boolean", false }
+}
 ( true )
 
 TEST
@@ -417,7 +542,11 @@ TEST
 [[
     not (not false)
 ]]
-{ "unary", "not", { "unary", "not", { "boolean", false } } }
+{ "unary", "not",
+  { "unary", "not",
+    { "boolean", false }
+  }
+}
 ( false )
 
 TEST
@@ -425,7 +554,11 @@ TEST
 [[
     not (not true)
 ]]
-{ "unary", "not", { "unary", "not", { "boolean", true } } }
+{ "unary", "not",
+  { "unary", "not",
+    { "boolean", true }
+  }
+}
 ( true )
 
 TEST
