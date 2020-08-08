@@ -25,7 +25,7 @@ TEST
 [[
     1
 ]]
-( pass )
+{ "number", 1 }
 ( 1 )
 
 TEST
@@ -33,7 +33,7 @@ TEST
 [[
     -2
 ]]
-( pass )
+{ "unary", "-", { "number", 2 } }
 ( -2 )
 
 TEST
@@ -41,7 +41,7 @@ TEST
 [[
     3.14
 ]]
-( pass )
+{ "number", 3.14 }
 ( 3.14 )
 
 TEST
@@ -49,7 +49,7 @@ TEST
 [[
     -4.50
 ]]
-( pass )
+{ "unary", "-", { "number", 4.50 } }
 ( -4.50 )
 
 TEST
@@ -57,7 +57,7 @@ TEST
 [[
     "foo"
 ]]
-( pass )
+{ "string", "foo" }
 ( "foo" )
 
 TEST
@@ -65,7 +65,7 @@ TEST
 [[
     "foo bar"
 ]]
-( pass )
+{ "string", "foo bar" }
 ( "foo bar" )
 
 TEST
@@ -73,7 +73,7 @@ TEST
 [[
     "tiny.lua"
 ]]
-( pass )
+{ "string", "tiny.lua" }
 ( "tiny.lua" )
 
 TEST
@@ -81,7 +81,7 @@ TEST
 [[
     true
 ]]
-( pass )
+{ "boolean", true }
 ( true )
 
 TEST
@@ -89,7 +89,7 @@ TEST
 [[
     false
 ]]
-( pass )
+{ "boolean", false }
 ( false )
 
 TEST
@@ -193,7 +193,7 @@ TEST
 [[
     -(-1)
 ]]
-( pass )
+{ "unary", "-", { "unary", "-", { "number", 1 } } }
 ( 1 )
 
 TEST
@@ -401,7 +401,7 @@ TEST
 [[
     not true
 ]]
-( pass )
+{ "unary", "not", { "boolean", true } }
 ( false )
 
 TEST
@@ -409,7 +409,7 @@ TEST
 [[
     not false
 ]]
-( pass )
+{ "unary", "not", { "boolean", false } }
 ( true )
 
 TEST
@@ -417,7 +417,7 @@ TEST
 [[
     not (not false)
 ]]
-( pass )
+{ "unary", "not", { "unary", "not", { "boolean", false } } }
 ( false )
 
 TEST
@@ -425,7 +425,7 @@ TEST
 [[
     not (not true)
 ]]
-( pass )
+{ "unary", "not", { "unary", "not", { "boolean", true } } }
 ( true )
 
 TEST

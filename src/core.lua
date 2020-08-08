@@ -163,16 +163,16 @@ local function parse()
 		) + V "product",
 
 		product = Ct (
-			Cc "product" * V "negation" * (token(S "*/") * V "negation") ^ 1
-		) + V "negation",
+			Cc "product" * V "unary" * (token(S "*/") * V "unary") ^ 1
+		) + V "unary",
 
-		negation = Ct (
-			Cc "negation" * (token "-" + K "not")  * V "factor"
-		) + V "factor",
+		unary = Ct (
+			Cc "unary" * (token "-" + K "not")  * V "atom"
+		) + V "atom",
 
-		factor =
-			skip "(" * V "expression" * skip ")" +
-			V "number" + V "string" + V "boolean" + V "funcall" + V "variable",
+		atom =
+			V "number" + V "string" + V "boolean" + V "funcall" + V "variable" +
+			skip "(" * V "expression" * skip ")",
 
 		conditional = Ct (
 			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
@@ -276,7 +276,7 @@ local function eval(ast, env)
 			a = eval(ast[i+1], env)
 		end
 		return a
-	elseif ast[1] == "negation" then
+	elseif ast[1] == "unary" then
 		local op, a = ast[2], eval(ast[3], env)
 		if op == "not" then
 			return not a
