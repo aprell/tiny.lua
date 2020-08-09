@@ -354,7 +354,10 @@ TEST
 [[
     1 == 1
 ]]
-( pass )
+{ "comparison",
+  { "number", 1 }, "==",
+  { "number", 1 }
+}
 ( true )
 
 TEST
@@ -362,7 +365,10 @@ TEST
 [[
     2 != 3
 ]]
-( pass )
+{ "comparison",
+  { "number", 2 }, "!=",
+  { "number", 3 }
+}
 ( true )
 
 TEST
@@ -370,7 +376,16 @@ TEST
 [[
     1 + 2 >= 2 + 3
 ]]
-( pass )
+{ "comparison",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }, ">=",
+  { "sum",
+    { "number", 2 }, "+",
+    { "number", 3 }
+  }
+}
 ( false )
 
 TEST
@@ -378,7 +393,16 @@ TEST
 [[
     2 + 3 <= 1 + 2
 ]]
-( pass )
+{ "comparison",
+  { "sum",
+    { "number", 2 }, "+",
+    { "number", 3 }
+  }, "<=",
+  { "sum",
+    { "number", 1 }, "+",
+    { "number", 2 }
+  }
+}
 ( false )
 
 TEST
@@ -386,7 +410,10 @@ TEST
 [[
     "foo" > "bar"
 ]]
-( pass )
+{ "comparison",
+  { "string", "foo" }, ">",
+  { "string", "bar" }
+}
 ( true )
 
 TEST
@@ -394,7 +421,10 @@ TEST
 [[
     "foo" < "bar"
 ]]
-( pass )
+{ "comparison",
+  { "string", "foo" }, "<",
+  { "string", "bar" }
+}
 ( false )
 
 TEST
@@ -402,7 +432,10 @@ TEST
 [[
     "true" != "false"
 ]]
-( pass )
+{ "comparison",
+  { "string", "true" }, "!=",
+  { "string", "false" }
+}
 ( true )
 
 TEST
@@ -410,7 +443,7 @@ TEST
 [[
     a
 ]]
-( pass )
+{ "variable", "a" }
 ( nil )
 
 TEST
@@ -418,7 +451,12 @@ TEST
 [[
     a = 1
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "a" },
+    { "number", 1 }
+  }
+}
 ( 1 )
 
 TEST
@@ -426,7 +464,12 @@ TEST
 [[
     b = 2
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "b" },
+    { "number", 2 }
+  }
+}
 ( 2 )
 
 TEST
@@ -434,7 +477,15 @@ TEST
 [[
     ab = a + b
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "ab" },
+	{ "sum",
+      { "variable", "a" }, "+",
+      { "variable", "b" }
+    }
+  }
+}
 ( 3 )
 
 TEST
@@ -442,7 +493,15 @@ TEST
 [[
     ab = ab * 2
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "ab" },
+	{ "product",
+      { "variable", "ab" }, "*",
+      { "number", 2 }
+    }
+  }
+}
 ( 6 )
 
 TEST
@@ -450,7 +509,21 @@ TEST
 [[
     c = ab > 2 * (b + 1)
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "c" },
+    { "comparison",
+      { "variable", "ab" }, ">",
+      { "product",
+        { "number", 2 }, "*",
+        { "sum",
+          { "variable", "b" }, "+",
+          { "number", 1 }
+        }
+      }
+    }
+  }
+}
 ( false )
 
 TEST
@@ -458,7 +531,15 @@ TEST
 [[
     c = "lua" != "tiny"
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "c" },
+    { "comparison",
+      { "string", "lua" }, "!=",
+      { "string", "tiny" }
+    }
+  }
+}
 ( true )
 
 TEST
@@ -466,7 +547,27 @@ TEST
 [[
     d = -(-a * 2) / -b > a
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "d" },
+    { "comparison",
+      { "product",
+        { "unary", "-",
+          { "product",
+            { "unary", "-",
+              { "variable", "a" },
+            }, "*",
+            { "number", 2 }
+          }
+        }, "/",
+        { "unary", "-",
+          { "variable", "b" }
+        }
+      }, ">",
+      { "variable", "a" }
+    }
+  }
+}
 ( false )
 
 TEST
@@ -474,7 +575,24 @@ TEST
 [[
     d = -ab / 2 * -1 * b > 0
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "d" },
+    { "comparison",
+      { "product",
+        { "unary", "-",
+          { "variable", "ab" }
+        }, "/",
+        { "number", 2 }, "*",
+        { "unary", "-",
+          { "number", 1 }
+        }, "*",
+        { "variable", "b" }
+      }, ">",
+      { "number", 0 }
+    }
+  }
+}
 ( true )
 
 TEST
@@ -482,7 +600,10 @@ TEST
 [[
     1 and 2
 ]]
-( pass )
+{ "conjunction",
+  { "number", 1 }, "and",
+  { "number", 2 }
+}
 ( 2 )
 
 TEST
@@ -490,7 +611,13 @@ TEST
 [[
     1 and 2 or 3
 ]]
-( pass )
+{ "disjunction",
+  { "conjunction",
+    { "number", 1 }, "and",
+    { "number", 2 }
+  }, "or",
+  { "number", 3 }
+}
 ( 2 )
 
 TEST
@@ -498,7 +625,10 @@ TEST
 [[
     "foo" or "bar"
 ]]
-( pass )
+{ "disjunction",
+  { "string", "foo" }, "or",
+  { "string", "bar" }
+}
 ( "foo" )
 
 TEST
@@ -506,7 +636,10 @@ TEST
 [[
     true and false
 ]]
-( pass )
+{ "conjunction",
+  { "boolean", true }, "and",
+  { "boolean", false }
+}
 ( false )
 
 TEST
@@ -514,7 +647,10 @@ TEST
 [[
     true or false
 ]]
-( pass )
+{ "disjunction",
+  { "boolean", true }, "or",
+  { "boolean", false }
+}
 ( true )
 
 TEST
@@ -566,7 +702,14 @@ TEST
 [[
     not "foo" or not 1
 ]]
-( pass )
+{ "disjunction",
+  { "unary", "not",
+    { "string", "foo" }
+  }, "or",
+  { "unary", "not",
+    { "number", 1 }
+  }
+}
 ( false )
 
 TEST
@@ -574,7 +717,22 @@ TEST
 [[
     1+2 > 3-4 and 5 < 6
 ]]
-( pass )
+{ "conjunction",
+  { "comparison",
+    { "sum",
+      { "number", 1 }, "+",
+      { "number", 2 }
+    }, ">",
+    { "sum",
+      { "number", 3 }, "-",
+      { "number", 4 }
+    }
+  }, "and",
+  { "comparison",
+    { "number", 5 }, "<",
+    { "number", 6 }
+  }
+}
 ( true )
 
 TEST
@@ -582,7 +740,19 @@ TEST
 [[
     1+2 > 3 or (4 and 5)
 ]]
-( pass )
+{ "disjunction",
+  { "comparison",
+    { "sum",
+      { "number", 1 }, "+",
+      { "number", 2 }
+    }, ">",
+    { "number", 3 }
+  }, "or",
+  { "conjunction",
+    { "number", 4 }, "and",
+    { "number", 5 }
+  }
+}
 ( 5 )
 
 TEST
@@ -590,7 +760,18 @@ TEST
 [[
     e = (e or 0) + 1
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "e" },
+    { "sum",
+      { "disjunction",
+        { "variable", "e" }, "or",
+        { "number", 0 }
+      }, "+",
+      { "number", 1 }
+    }
+  }
+}
 ( 1 )
 
 TEST
@@ -598,7 +779,18 @@ TEST
 [[
     e = (e or 0) + 1
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "e" },
+    { "sum",
+      { "disjunction",
+        { "variable", "e" }, "or",
+        { "number", 0 }
+      }, "+",
+      { "number", 1 }
+    }
+  }
+}
 ( 2 )
 
 TEST
@@ -606,7 +798,18 @@ TEST
 [[
     e = (e or 0) + 1
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "e" },
+    { "sum",
+      { "disjunction",
+        { "variable", "e" }, "or",
+        { "number", 0 }
+      }, "+",
+      { "number", 1 }
+    }
+  }
+}
 ( 3 )
 
 TEST
@@ -614,7 +817,18 @@ TEST
 [[
     e = (e >= 3) and 4
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "e" },
+    { "conjunction",
+      { "comparison",
+        { "variable", "e" }, ">=",
+        { "number", 3 }
+      }, "and",
+      { "number", 4 }
+    }
+  }
+}
 ( 4 )
 
 TEST
@@ -622,23 +836,38 @@ TEST
 [[
     e = not 4 or e+1
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "e" },
+    { "disjunction",
+      { "unary", "not",
+        { "number", 4 }
+      }, "or",
+      { "sum",
+        { "variable", "e" }, "+",
+        { "number", 1 }
+      }
+    }
+  }
+}
 ( 5 )
 
 TEST
 ----
 [[
     a = 1
-]]
-( pass )
-( 1 )
-
-TEST
-----
-[[
     b = 2
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "a" },
+    { "number", 1 }
+  },
+  { "assignment",
+    { "variable", "b" },
+    { "number", 2 }
+  }
+}
 ( 2 )
 
 TEST
