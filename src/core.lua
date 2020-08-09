@@ -125,10 +125,7 @@ local function parse()
 		expression =
 			V "conditional" +
 			V "disjunction" +
-			V "comparison" +
-			V "sum" +
-			V "fundef" +
-			V "funcall",
+			V "fundef",
 
 		disjunction = Ct (
 			Cc "disjunction" * V "conjunction" * (K "or" * V "conjunction") ^ 1
