@@ -161,8 +161,7 @@ local function parse()
 			V "while_loop" +
 			V "for_loop" +
 			V "do_block" +
-			V "fundef" +
-			V "funcall",
+			V "fundef",
 
 		assignment = Ct (
 			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" * V "expression"
