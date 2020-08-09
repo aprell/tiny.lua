@@ -1177,8 +1177,9 @@ TEST
         local a = 1
         local b = 2
         local c = 3
-        a + b + c
-    end f()
+        return a + b + c
+    end
+    f()
 ]]
 ( pass )
 ( 6 )
@@ -1212,8 +1213,9 @@ TEST
 [[
     f = function (a, b, c)
         c = c or 3
-        a + b + c
-    end f(1, 2, 3)
+        return a + b + c
+    end
+    f(1, 2, 3)
 ]]
 ( pass )
 ( 6 )
@@ -1283,9 +1285,10 @@ TEST
             while a < 10 do
                 a = a + 1
             end
-            a + b
+            return a + b
         end
-    end a = f(); a()
+    end
+    a = f(); a()
 ]]
 ( pass )
 ( 12 )
@@ -1299,9 +1302,10 @@ TEST
             while a < 10 do
                 a = a + 1
             end
-            a + b
+            return a + b
         end
-    end a = f(); a()
+    end
+    a = f(); a()
 ]]
 ( pass )
 ( 12 )

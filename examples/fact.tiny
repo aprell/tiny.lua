@@ -3,7 +3,7 @@ function fact_it(n)
 	for i = 2, n do
 		a = a * i
 	end
-	a
+	return a
 end
 
 function fact_rec(n)

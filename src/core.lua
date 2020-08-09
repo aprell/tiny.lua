@@ -161,7 +161,8 @@ local function parse()
 			V "while_loop" +
 			V "for_loop" +
 			V "do_block" +
-			V "fundef",
+			V "fundef" +
+			V "return_stmt",
 
 		assignment = Ct (
 			Cc "assignment" * K "local" ^ -1 * V "variable" * skip "=" * V "expression"
@@ -210,6 +211,10 @@ local function parse()
 			Cc "block" * V "statement" *
 			((skip ";" + skip "") * V "statement") ^ 0 *
 			((skip ";" + skip "") * V "expression") ^ -1
+		),
+
+		return_stmt = Ct (
+			K "return" * V "expression" ^ -1
 		),
 
 		operator =
@@ -291,9 +296,18 @@ local function eval(ast, env)
 		return eval(ast[2], Env(env))
 	elseif ast[1] == "block" then
 		for i = 2, #ast-1 do
-			eval(ast[i], env)
+			local val = eval(ast[i], env)
+			if ast[i][1] == "return" then
+				return val
+			end
 		end
 		return eval(ast[#ast], env)
+	elseif ast[1] == "return" then
+		if ast[2] ~= nil then
+			return eval(ast[2], env)
+		else
+			return nil
+		end
 	elseif ast[1] == "function" then
 		return function (...)
 			local params = #ast == 4 and slice(ast[2], 2) or {}
