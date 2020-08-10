@@ -1175,7 +1175,23 @@ TEST
 [[
     while a > 1 do a = a - 1 end
 ]]
-( pass )
+{ "block",
+  { "while",
+    { "comparison",
+      { "variable", "a" }, ">",
+      { "number", 1 }
+    }, "do",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "-",
+          { "number", 1 }
+        }
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
@@ -1183,7 +1199,23 @@ TEST
 [[
     while b < 10 do b = b + a end
 ]]
-( pass )
+{ "block",
+  { "while",
+    { "comparison",
+      { "variable", "b" }, "<",
+      { "number", 10 }
+    }, "do",
+    { "block",
+      { "assignment",
+        { "variable", "b" },
+        { "sum",
+          { "variable", "b" }, "+",
+          { "variable", "a" }
+        }
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
@@ -1191,7 +1223,26 @@ TEST
 [[
     while a != b - 1 do b = b - 1 end
 ]]
-( pass )
+{ "block",
+  { "while",
+    { "comparison",
+      { "variable", "a" }, "!=",
+      { "sum",
+        { "variable", "b" }, "-",
+        { "number", 1 }
+      }
+    }, "do",
+    { "block",
+      { "assignment",
+        { "variable", "b" },
+        { "sum",
+          { "variable", "b" }, "-",
+          { "number", 1 }
+        }
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
@@ -1199,7 +1250,23 @@ TEST
 [[
     while a == b + 1 do b = false end
 ]]
-( pass )
+{ "block",
+  { "while",
+    { "comparison",
+      { "variable", "a" }, "==",
+      { "sum",
+        { "variable", "b" }, "+",
+        { "number", 1 }
+      }
+    }, "do",
+    { "block",
+      { "assignment",
+        { "variable", "b" },
+        { "boolean", false }
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
@@ -1214,7 +1281,44 @@ TEST
     -- a == 9, b == 2
     a + b
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "boolean", true },
+    "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "number", 1 }
+      },
+      { "assignment",
+        { "variable", "b" },
+        { "number", 2 }
+      },
+      { "while",
+        { "comparison",
+          { "sum",
+            { "variable", "a" }, "+",
+            { "variable", "b" }
+          }, "<",
+          { "number", 10 }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "+",
+              { "number", 2 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  },
+  { "sum",
+    { "variable", "a" }, "+",
+    { "variable", "b" }
+  }
+}
 ( 11 )
 
 TEST
@@ -1229,48 +1333,268 @@ TEST
     -- a == 1, b == 2
     a + b
 ]]
-( pass )
+{ "block",
+  { "while",
+    { "comparison",
+      { "variable", "a" }, "!=",
+      { "number", 1 }
+    }, "do",
+    { "block",
+      { "if",
+        { "disjunction",
+          { "comparison",
+            { "product",
+              { "variable", "a" }, "/",
+              { "variable", "b" }
+            }, "==",
+            { "number", 4 }
+          }, "or",
+          { "comparison",
+            { "product",
+              { "variable", "a" }, "/",
+              { "variable", "b" }
+            }, "==",
+            { "number", 2 }
+          }
+        }, "then",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "product",
+              { "variable", "a" }, "/",
+              { "variable", "b" }
+            }
+          }
+        }, "end"
+      },
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "-",
+          { "number", 1 }
+        }
+      }
+    }, "end"
+  },
+  { "sum",
+    { "variable", "a" }, "+",
+    { "variable", "b" }
+  }
+}
 ( 3 )
 
 TEST
 ----
 [[
+    -- a == 1
     for i = 1, 1 do a = a + i end
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment", "local",
+        { "variable", "i" },
+        { "number", 1 }
+      },
+      { "while",
+        { "comparison",
+          { "variable", "i" }, "<=",
+          { "number", 1 }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "+",
+              { "variable", "i" }
+            }
+          },
+          { "assignment",
+            { "variable", "i" },
+            { "sum",
+              { "variable", "i" }, "+",
+              { "number", 1 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
 ----
 [[
+    -- a == 2
     for i = 1, 2 do a = a - i end
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment", "local",
+        { "variable", "i" },
+        { "number", 1 }
+      },
+      { "while",
+        { "comparison",
+          { "variable", "i" }, "<=",
+          { "number", 2 }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "-",
+              { "variable", "i" }
+            }
+          },
+          { "assignment",
+            { "variable", "i" },
+            { "sum",
+              { "variable", "i" }, "+",
+              { "number", 1 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
 ----
 [[
+    -- a == -1
     for i = 1, 3 do a = a + i end
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment", "local",
+        { "variable", "i" },
+        { "number", 1 }
+      },
+      { "while",
+        { "comparison",
+          { "variable", "i" }, "<=",
+          { "number", 3 }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "+",
+              { "variable", "i" }
+            }
+          },
+          { "assignment",
+            { "variable", "i" },
+            { "sum",
+              { "variable", "i" }, "+",
+              { "number", 1 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
 ----
 [[
+    -- a == 5
     for i = -1, -4 do a = a - i end
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment", "local",
+        { "variable", "i" },
+        { "unary", "-",
+          { "number", 1 }
+        }
+      },
+      { "while",
+        { "comparison",
+          { "variable", "i" }, "<=",
+          { "unary", "-",
+            { "number", 4 }
+          }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "-",
+              { "variable", "i" }
+            }
+          },
+          { "assignment",
+            { "variable", "i" },
+            { "sum",
+              { "variable", "i" }, "+",
+              { "number", 1 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  }
+}
 ( nil )
 
 TEST
 ----
 [[
+    -- a == 5
     for i = -1, +4 do a = a + i end
     a = a - 13
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment", "local",
+        { "variable", "i" },
+        { "unary", "-",
+          { "number", 1 }
+        }
+      },
+      { "while",
+        { "comparison",
+          { "variable", "i" }, "<=",
+          { "number", 4 }
+        }, "do",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "+",
+              { "variable", "i" }
+            }
+          },
+          { "assignment",
+            { "variable", "i" },
+            { "sum",
+              { "variable", "i" }, "+",
+              { "number", 1 }
+            }
+          }
+        }, "end"
+      }
+    }, "end"
+  },
+  { "assignment",
+    { "variable", "a" },
+    { "sum",
+      { "variable", "a" }, "-",
+      { "number", 13 }
+    }
+  }
+}
 ( 1 )
 
 TEST
@@ -1285,7 +1609,30 @@ TEST
         end
     end
 ]]
-( pass )
+{ "block",
+  { "do",
+    { "block",
+      { "assignment",
+        { "variable", "x" },
+        { "string", "x" }
+      },
+      { "assignment",
+        { "variable", "y" },
+        { "string", "y" }
+      },
+      { "if",
+        { "comparison",
+          { "variable", "x" }, "==",
+          { "variable", "y" }
+        }, "then",
+        { "boolean", true },
+        "else",
+        { "boolean", false },
+        "end"
+      }
+    }, "end"
+  }
+}
 ( false )
 
 TEST
@@ -1293,8 +1640,42 @@ TEST
 [[
     x == nil and y == nil
 ]]
-( pass )
+{ "conjunction",
+  { "comparison",
+    { "variable", "x" }, "==",
+    { "variable", "nil" }
+  }, "and",
+  { "comparison",
+    { "variable", "y" }, "==",
+    { "variable", "nil" }
+  }
+}
 ( true )
+
+TEST
+----
+[[
+    -- Uh-oh
+    nil = true
+    x == nil and y == nil
+]]
+{ "block",
+  { "assignment",
+    { "variable", "nil" },
+    { "boolean", true }
+  },
+  { "conjunction",
+    { "comparison",
+      { "variable", "x" }, "==",
+      { "variable", "nil" }
+    }, "and",
+    { "comparison",
+      { "variable", "y" }, "==",
+      { "variable", "nil" }
+    }
+  }
+}
+( false )
 
 TEST
 ----
