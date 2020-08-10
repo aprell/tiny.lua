@@ -875,7 +875,16 @@ TEST
 [[
     if a > 0 then true end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, ">",
+      { "number", 0 }
+    }, "then",
+    { "boolean", true },
+    "end"
+  }
+}
 ( true )
 
 TEST
@@ -883,7 +892,16 @@ TEST
 [[
     if a < 0 then true end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, "<",
+      { "number", 0 }
+    }, "then",
+    { "boolean", true },
+    "end"
+  }
+}
 ( nil )
 
 TEST
@@ -891,7 +909,18 @@ TEST
 [[
     if a > 0 then true else false end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, ">",
+      { "number", 0 }
+    }, "then",
+    { "boolean", true },
+    "else",
+    { "boolean", false },
+    "end"
+  }
+}
 ( true )
 
 TEST
@@ -899,7 +928,18 @@ TEST
 [[
     if a < 0 then true else false end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, "<",
+      { "number", 0 }
+    }, "then",
+    { "boolean", true },
+    "else",
+    { "boolean", false },
+    "end"
+  }
+}
 ( false )
 
 TEST
@@ -907,7 +947,20 @@ TEST
 [[
     if a > 0 then x = 1 end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, ">",
+      { "number", 0 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "x" },
+        { "number", 1 }
+      }
+    }, "end"
+  }
+}
 ( 1 )
 
 TEST
@@ -915,7 +968,26 @@ TEST
 [[
     if a < 0 then x = 1 else x = 2 end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, "<",
+      { "number", 0 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "x" },
+        { "number", 1 }
+      }
+    }, "else",
+    { "block",
+      { "assignment",
+        { "variable", "x" },
+        { "number", 2 }
+      }
+    }, "end"
+  }
+}
 ( 2 )
 
 TEST
@@ -923,7 +995,19 @@ TEST
 [[
     if not x then a = 3 end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "unary", "not",
+      { "variable", "x" }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "number", 3 }
+      }
+    }, "end"
+  }
+}
 ( 3 )
 
 TEST
@@ -943,7 +1027,63 @@ TEST
         end
     end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, "==",
+      { "number", 1 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "+",
+          { "number", 1 }
+        }
+      }
+    }, "else",
+    { "block",
+      { "if",
+        { "comparison",
+          { "variable", "a" }, "==",
+          { "number", 2 }
+        }, "then",
+        { "block",
+          { "assignment",
+            { "variable", "a" },
+            { "sum",
+              { "variable", "a" }, "+",
+              { "number", 2 }
+            }
+          }
+        }, "else",
+        { "block",
+          { "if",
+            { "comparison",
+              { "variable", "a" }, "==",
+              { "number", 3 }
+            }, "then",
+            { "block",
+              { "assignment",
+                { "variable", "a" },
+                { "sum",
+                  { "variable", "a" }, "+",
+                  { "number", 3 }
+                }
+              }
+            }, "else",
+            { "block",
+              { "assignment",
+                { "variable", "a" },
+                { "number", 10 }
+              }
+            }, "end"
+          }
+        }, "end"
+      }
+    }, "end"
+  }
+}
 ( 6 )
 
 TEST
@@ -954,7 +1094,55 @@ TEST
     elseif a == 5 then a = a + 3
     else a = 10 end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "comparison",
+      { "variable", "a" }, "==",
+      { "number", 3 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "+",
+          { "number", 1 }
+        }
+      }
+    }, "elseif",
+    { "comparison",
+      { "variable", "a" }, "==",
+      { "number", 4 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "+",
+          { "number", 2 }
+        }
+      }
+    }, "elseif",
+    { "comparison",
+      { "variable", "a" }, "==",
+      { "number", 5 }
+    }, "then",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "sum",
+          { "variable", "a" }, "+",
+          { "number", 3 }
+        }
+      }
+    }, "else",
+    { "block",
+      { "assignment",
+        { "variable", "a" },
+        { "number", 10 }
+      }
+    }, "end"
+  }
+}
 ( 10 )
 
 TEST
@@ -964,7 +1152,22 @@ TEST
     elseif false then 2
     elseif false then 3 end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "boolean", false },
+    "then",
+    { "number", 1 },
+    "elseif",
+    { "boolean", false },
+    "then",
+    { "number", 2 },
+    "elseif",
+    { "boolean", false },
+    "then",
+    { "number", 3 },
+    "end"
+  }
+}
 ( nil )
 
 TEST
