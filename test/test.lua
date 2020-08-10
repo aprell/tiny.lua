@@ -1211,25 +1211,11 @@ TEST
             a = a + 2
         end
     end
+    -- a == 9, b == 2
+    a + b
 ]]
 ( pass )
-( nil )
-
-TEST
-----
-[[
-    a
-]]
-( pass )
-( 9 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
+( 11 )
 
 TEST
 ----
@@ -1240,25 +1226,11 @@ TEST
         end
         a = a - 1
     end
+    -- a == 1, b == 2
+    a + b
 ]]
 ( pass )
-( nil )
-
-TEST
-----
-[[
-    a
-]]
-( pass )
-( 1 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
+( 3 )
 
 TEST
 ----
@@ -1296,13 +1268,6 @@ TEST
 ----
 [[
     for i = -1, +4 do a = a + i end
-]]
-( pass )
-( nil )
-
-TEST
-----
-[[
     a = a - 13
 ]]
 ( pass )
@@ -1326,52 +1291,31 @@ TEST
 TEST
 ----
 [[
-    x
-]]
-( pass )
-( nil )
-
-TEST
-----
-[[
-    y
-]]
-( pass )
-( nil )
-
-TEST
-----
-[[
-    f = function ()
-        a = a + 1
-    end f()
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    a
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    c
+    x == nil and y == nil
 ]]
 ( pass )
 ( true )
+
+TEST
+----
+[[
+    -- a == 1
+    f = function ()
+        a = a + 1
+    end
+    f()
+]]
+( pass )
+( 2 )
+
+TEST
+----
+[[
+    -- c == true, a == 2, b == 2
+    if c then a + b end
+]]
+( pass )
+( 4 )
 
 TEST
 ----
@@ -1390,26 +1334,11 @@ TEST
 TEST
 ----
 [[
-    a
+    -- c == true, a == 2, b == 2
+    if c then a + b end
 ]]
 ( pass )
-( 2 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    c
-]]
-( pass )
-( true )
+( 4 )
 
 TEST
 ----
@@ -1426,30 +1355,6 @@ TEST
 TEST
 ----
 [[
-    a
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    c
-]]
-( pass )
-( true )
-
-TEST
-----
-[[
     f(1, 2)
 ]]
 ( pass )
@@ -1458,26 +1363,11 @@ TEST
 TEST
 ----
 [[
-    a
+    -- c == true, a == 2, b == 2
+    if c then a + b end
 ]]
 ( pass )
-( 2 )
-
-TEST
-----
-[[
-    b
-]]
-( pass )
-( 2 )
-
-TEST
-----
-[[
-    c
-]]
-( pass )
-( true )
+( 4 )
 
 TEST
 ----
