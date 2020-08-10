@@ -207,18 +207,15 @@ local function parse()
 			Cc "args" * V "expression" * (skip "," * V "expression") ^ 0
 		),
 
+		return_stmt = Ct (
+			K "return" * V "expression" ^ -1
+		),
+
 		block = Ct (
 			Cc "block" * V "statement" *
 			((skip ";" + skip "") * V "statement") ^ 0 *
 			((skip ";" + skip "") * V "expression") ^ -1
 		),
-
-		return_stmt = Ct (
-			K "return" * V "expression" ^ -1
-		),
-
-		operator =
-			arith_op + rel_op + bool_op + "..",
 
 	} / unpack
 end
