@@ -1686,7 +1686,25 @@ TEST
     end
     f()
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "block",
+        { "assignment",
+          { "variable", "a" },
+          { "sum",
+            { "variable", "a" }, "+",
+            { "number", 1 }
+          }
+        }
+      }, "end"
+    }
+  },
+  { "call",
+    { "variable", "f" }
+  }
+}
 ( 2 )
 
 TEST
@@ -1695,7 +1713,16 @@ TEST
     -- c == true, a == 2, b == 2
     if c then a + b end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "variable", "c" },
+    "then",
+    { "sum",
+      { "variable", "a" }, "+",
+      { "variable", "b" }
+    }, "end"
+  }
+}
 ( 4 )
 
 TEST
@@ -1709,7 +1736,37 @@ TEST
     end
     f()
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "block",
+        { "assignment", "local",
+          { "variable", "a" },
+          { "number", 1 }
+        },
+        { "assignment", "local",
+          { "variable", "b" },
+          { "number", 2 }
+        },
+        { "assignment", "local",
+          { "variable", "c" },
+          { "number", 3 }
+        },
+        { "return",
+          { "sum",
+            { "variable", "a" }, "+",
+            { "variable", "b" }, "+",
+            { "variable", "c" }
+          }
+        }
+      }, "end"
+    }
+  },
+  { "call",
+    { "variable", "f" }
+  }
+}
 ( 6 )
 
 TEST
@@ -1718,7 +1775,16 @@ TEST
     -- c == true, a == 2, b == 2
     if c then a + b end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "variable", "c" },
+    "then",
+    { "sum",
+      { "variable", "a" }, "+",
+      { "variable", "b" }
+    }, "end"
+  }
+}
 ( 4 )
 
 TEST
@@ -1730,7 +1796,42 @@ TEST
     end
     f(1, 2, 3)
 ]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "params",
+        { "variable", "a" },
+        { "variable", "b" },
+        { "variable", "c" }
+      },
+      { "block",
+        { "assignment",
+          { "variable", "c" },
+          { "disjunction",
+            { "variable", "c" }, "or",
+            { "number", 3 }
+          }
+        },
+        { "return",
+          { "sum",
+            { "variable", "a" }, "+",
+            { "variable", "b" }, "+",
+            { "variable", "c" }
+          }
+        }
+      }, "end"
+    }
+  },
+  { "call",
+    { "variable", "f" },
+    { "args",
+      { "number", 1 },
+      { "number", 2 },
+      { "number", 3 }
+    }
+  }
+}
 ( 6 )
 
 TEST
@@ -1738,7 +1839,13 @@ TEST
 [[
     f(1, 2)
 ]]
-( pass )
+{ "call",
+  { "variable", "f" },
+  { "args",
+    { "number", 1 },
+    { "number", 2 }
+  }
+}
 ( 6 )
 
 TEST
@@ -1747,7 +1854,16 @@ TEST
     -- c == true, a == 2, b == 2
     if c then a + b end
 ]]
-( pass )
+{ "block",
+  { "if",
+    { "variable", "c" },
+    "then",
+    { "sum",
+      { "variable", "a" }, "+",
+      { "variable", "b" }
+    }, "end"
+  }
+}
 ( 4 )
 
 TEST
@@ -1755,7 +1871,7 @@ TEST
 [[
     function f()
         local a = 1
-        function ()
+        return function ()
             while a < 10 do
                 a = a + 1
             end
@@ -1764,24 +1880,55 @@ TEST
     end
     a = f(); a()
 ]]
-( pass )
-( 12 )
-
-TEST
-----
-[[
-    function f()
-        local a = 1
-        function ()
-            while a < 10 do
-                a = a + 1
-            end
-            return a + b
-        end
-    end
-    a = f(); a()
-]]
-( pass )
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "block",
+        { "assignment", "local",
+          { "variable", "a" },
+          { "number", 1 }
+        },
+        { "return",
+          { "function",
+            { "block",
+              { "while",
+                { "comparison",
+                  { "variable", "a" }, "<",
+                  { "number", 10 }
+                }, "do",
+                { "block",
+                  { "assignment",
+                    { "variable", "a" },
+                    { "sum",
+                      { "variable", "a" }, "+",
+                      { "number", 1 }
+                    }
+                  }
+                }, "end"
+              },
+              { "return",
+                { "sum",
+                  { "variable", "a" }, "+",
+                  { "variable", "b" }
+                }
+              }
+            }, "end"
+          }
+        }
+      }, "end"
+    }
+  },
+  { "assignment",
+    { "variable", "a" },
+    { "call",
+      { "variable", "f" }
+    }
+  },
+  { "call",
+    { "variable", "a" }
+  }
+}
 ( 12 )
 
 --------------
