@@ -125,7 +125,7 @@ local function parse()
 		expression =
 			V "conditional" +
 			V "disjunction" +
-			V "fundef",
+			V "function_def",
 
 		disjunction = Ct (
 			Cc "disjunction" * V "conjunction" * (K "or" * V "conjunction") ^ 1
@@ -152,7 +152,8 @@ local function parse()
 		) + V "atom",
 
 		atom =
-			V "literal" + V "funcall" + V "variable" +
+			-- function_call must come before variable
+			V "literal" + V "function_call" + V "variable" +
 			skip "(" * V "expression" * skip ")",
 
 		statement =
@@ -161,7 +162,7 @@ local function parse()
 			V "while_loop" +
 			V "for_loop" +
 			V "do_block" +
-			V "fundef" +
+			V "function_def" +
 			V "return_stmt",
 
 		assignment = Ct (
@@ -189,7 +190,7 @@ local function parse()
 			K "do" * V "block" * K "end"
 		),
 
-		fundef = Ct (
+		function_def = Ct (
 			K "function" * V "variable" ^ -1 *
 			skip "(" * V "params" ^ -1 * skip ")" *
 			V "block" * K "end"
@@ -199,8 +200,8 @@ local function parse()
 			Cc "params" * V "variable" * (skip "," * V "variable") ^ 0
 		),
 
-		funcall = Ct (
-			Cc "funcall" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
+		function_call = Ct (
+			Cc "call" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
 		),
 
 		args = Ct (
@@ -318,7 +319,7 @@ local function eval(ast, env)
 			end
 			return eval(body, scope)
 		end
-	elseif ast[1] == "funcall" then
+	elseif ast[1] == "call" then
 		local fun = eval(ast[2], env) or raise "Undefined function"
 		local args = ast[3] and slice(ast[3], 2) or {}
 		return fun(unpack(map(args, function (ast)
