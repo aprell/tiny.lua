@@ -136,7 +136,11 @@ local function parse()
 		) + V "comparison",
 
 		comparison = Ct (
-			Cc "comparison" * V "sum" * token(rel_op) * V "sum"
+			Cc "comparison" * V "concatenation" * token(rel_op) * V "concatenation"
+		) + V "concatenation",
+
+		concatenation = Ct (
+			Cc "concatenation" * V "sum" * (token ".." * V "sum") ^ 1
 		) + V "sum",
 
 		sum = Ct (
@@ -250,6 +254,14 @@ local function eval(ast, env)
 		for i = 3, #ast, 2 do
 			local op, b = ast[i], eval(ast[i+1], env)
 			a = builtin[op](a, b)
+		end
+		return a
+	elseif ast[1] == "concatenation" then
+		-- String concatenation is right-associative
+		local a = eval(ast[#ast], env)
+		for i = #ast-2, 1, -2 do
+			local op, b = ast[i+1], eval(ast[i], env)
+			a = builtin[op](b, a)
 		end
 		return a
 	elseif ast[1] == "conjunction" or ast[1] == "disjunction" then

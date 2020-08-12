@@ -352,6 +352,45 @@ TEST
 TEST
 ----
 [[
+    "foo" .. "bar"
+]]
+{ "concatenation",
+  { "string", "foo" }, "..",
+  { "string", "bar" }
+}
+( "foobar" )
+
+TEST
+----
+[[
+    10-7 .. ", "
+    .. 9-7 .. ", "
+    .. 8-7 .. ", "
+    .. "Go!"
+]]
+{ "concatenation",
+  { "sum",
+    { "number", 10 }, "-",
+    { "number", 7 }
+  }, "..",
+  { "string", ", " }, "..",
+  { "sum",
+    { "number", 9 }, "-",
+    { "number", 7 }
+  }, "..",
+  { "string", ", " }, "..",
+  { "sum",
+    { "number", 8 }, "-",
+    { "number", 7 }
+  }, "..",
+  { "string", ", " }, "..",
+  { "string", "Go!" }
+}
+( "3, 2, 1, Go!" )
+
+TEST
+----
+[[
     1 == 1
 ]]
 { "comparison",
