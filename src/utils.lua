@@ -19,16 +19,23 @@ function utils.slice(t, i, j)
 end
 
 -- Overrides tostring to print table contents
-function tostring(n)
-	if type(n) == "table"  then
+function tostring(n, indent)
+	indent = indent or ""
+	if type(n) == "table" then
 		local mt = getmetatable(n)
 		if mt ~= nil and mt.__tostring ~= nil then
-			return mt.__tostring(n)
+			return indent .. mt.__tostring(n)
 		else
-			return "{" .. table.concat(utils.map(n, tostring), ", ") .. "}"
+			return ("%s{\n%s\n%s}"):format(
+				indent,
+				table.concat(utils.map(n, function (m)
+					return tostring(m, indent .. string.rep(" ", 4))
+				end), ",\n"),
+				indent
+			)
 		end
 	else
-		return _tostring(n)
+		return indent .. _tostring(n)
 	end
 end
 
