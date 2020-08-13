@@ -197,7 +197,7 @@ local function parse()
 		function_def = Ct (
 			K "function" * V "variable" ^ -1 *
 			skip "(" * V "params" ^ -1 * skip ")" *
-			V "block" * K "end"
+			(V "block" + V "expression") * K "end"
 		) / desugar,
 
 		params = Ct (

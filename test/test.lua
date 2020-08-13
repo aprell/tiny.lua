@@ -519,7 +519,7 @@ TEST
 { "block",
   { "assignment",
     { "variable", "ab" },
-	{ "sum",
+    { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
     }
@@ -535,7 +535,7 @@ TEST
 { "block",
   { "assignment",
     { "variable", "ab" },
-	{ "product",
+    { "product",
       { "variable", "ab" }, "*",
       { "number", 2 }
     }
@@ -1715,6 +1715,31 @@ TEST
   }
 }
 ( false )
+
+TEST
+----
+[[
+    -- a == 1
+    f = function ()
+        a + 1
+    end
+    f()
+]]
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "sum",
+        { "variable", "a" }, "+",
+        { "number", 1 }
+      }, "end"
+    }
+  },
+  { "call",
+    { "variable", "f" }
+  }
+}
+( 2 )
 
 TEST
 ----
