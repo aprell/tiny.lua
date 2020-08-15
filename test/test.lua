@@ -1903,11 +1903,13 @@ TEST
 [[
     f(1, 2)
 ]]
-{ "call",
-  { "variable", "f" },
-  { "args",
-    { "number", 1 },
-    { "number", 2 }
+{ "block",
+  { "call",
+    { "variable", "f" },
+    { "args",
+      { "number", 1 },
+      { "number", 2 }
+    }
   }
 }
 ( 6 )

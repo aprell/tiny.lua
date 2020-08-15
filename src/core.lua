@@ -167,6 +167,7 @@ local function parse()
 			V "for_loop" +
 			V "do_block" +
 			V "function_def" +
+			V "function_call" +
 			V "return_stmt",
 
 		assignment = Ct (
