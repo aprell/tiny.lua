@@ -128,11 +128,11 @@ local function parse()
 			V "function_def",
 
 		disjunction = Ct (
-			Cc "disjunction" * V "conjunction" * (K "or" * V "conjunction") ^ 1
+			Cc "disjunction" * V "conjunction" * (skip "or" * V "conjunction") ^ 1
 		) + V "conjunction",
 
 		conjunction = Ct (
-			Cc "conjunction" * V "comparison" * (K "and" * V "comparison") ^ 1
+			Cc "conjunction" * V "comparison" * (skip "and" * V "comparison") ^ 1
 		) + V "comparison",
 
 		comparison = Ct (
@@ -140,7 +140,7 @@ local function parse()
 		) + V "concatenation",
 
 		concatenation = Ct (
-			Cc "concatenation" * V "sum" * (token ".." * V "sum") ^ 1
+			Cc "concatenation" * V "sum" * (skip ".." * V "sum") ^ 1
 		) + V "sum",
 
 		sum = Ct (
@@ -247,9 +247,13 @@ local function eval(ast, env)
 			end
 		end
 		return val
-	elseif ast[1] == "comparison" then
-		local a, op, b = eval(ast[2], env), ast[3], eval(ast[4], env)
-		return builtin[op](a, b)
+	elseif ast[1] == "unary" then
+		local op, a = ast[2], eval(ast[3], env)
+		if op == "not" then
+			return not a
+		else
+			return -a
+		end
 	elseif ast[1] == "sum" or ast[1] == "product" then
 		local a = eval(ast[2], env)
 		for i = 3, #ast, 2 do
@@ -260,28 +264,30 @@ local function eval(ast, env)
 	elseif ast[1] == "concatenation" then
 		-- String concatenation is right-associative
 		local a = eval(ast[#ast], env)
-		for i = #ast-2, 1, -2 do
-			local op, b = ast[i+1], eval(ast[i], env)
-			a = builtin[op](b, a)
+		for i = #ast-1, 2, -1 do
+			local b = eval(ast[i], env)
+			a = builtin[".."](b, a)
 		end
 		return a
-	elseif ast[1] == "conjunction" or ast[1] == "disjunction" then
+	elseif ast[1] == "comparison" then
+		local a, op, b = eval(ast[2], env), ast[3], eval(ast[4], env)
+		return builtin[op](a, b)
+	elseif ast[1] == "conjunction" then
 		local a = eval(ast[2], env)
-		for i = 3, #ast, 2 do
-			local op = ast[i]
+		for i = 3, #ast do
 			-- Short-circuit evaluation
-			if op == "and" and not a or op == "or" and a then
-				return a
-			end
-			a = eval(ast[i+1], env)
+			if not a then return a end
+			a = eval(ast[i], env)
 		end
 		return a
-	elseif ast[1] == "unary" then
-		local op, a = ast[2], eval(ast[3], env)
-		if op == "not" then
-			return not a
+	elseif ast[1] == "disjunction" then
+		local a = eval(ast[2], env)
+		for i = 3, #ast do
+			-- Short-circuit evaluation
+			if a then return a end
+			a = eval(ast[i], env)
 		end
-		return -a
+		return a
 	elseif ast[1] == "if" then
 		if eval(ast[2], env) then
 			return eval(ast[4], Env(env))

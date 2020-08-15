@@ -355,7 +355,7 @@ TEST
     "foo" .. "bar"
 ]]
 { "concatenation",
-  { "string", "foo" }, "..",
+  { "string", "foo" },
   { "string", "bar" }
 }
 ( "foobar" )
@@ -372,18 +372,18 @@ TEST
   { "sum",
     { "number", 10 }, "-",
     { "number", 7 }
-  }, "..",
-  { "string", ", " }, "..",
+  },
+  { "string", ", " },
   { "sum",
     { "number", 9 }, "-",
     { "number", 7 }
-  }, "..",
-  { "string", ", " }, "..",
+  },
+  { "string", ", " },
   { "sum",
     { "number", 8 }, "-",
     { "number", 7 }
-  }, "..",
-  { "string", ", " }, "..",
+  },
+  { "string", ", " },
   { "string", "Go!" }
 }
 ( "3, 2, 1, Go!" )
@@ -640,7 +640,7 @@ TEST
     1 and 2
 ]]
 { "conjunction",
-  { "number", 1 }, "and",
+  { "number", 1 },
   { "number", 2 }
 }
 ( 2 )
@@ -652,9 +652,9 @@ TEST
 ]]
 { "disjunction",
   { "conjunction",
-    { "number", 1 }, "and",
+    { "number", 1 },
     { "number", 2 }
-  }, "or",
+  },
   { "number", 3 }
 }
 ( 2 )
@@ -665,7 +665,7 @@ TEST
     "foo" or "bar"
 ]]
 { "disjunction",
-  { "string", "foo" }, "or",
+  { "string", "foo" },
   { "string", "bar" }
 }
 ( "foo" )
@@ -676,7 +676,7 @@ TEST
     true and false
 ]]
 { "conjunction",
-  { "boolean", true }, "and",
+  { "boolean", true },
   { "boolean", false }
 }
 ( false )
@@ -687,7 +687,7 @@ TEST
     true or false
 ]]
 { "disjunction",
-  { "boolean", true }, "or",
+  { "boolean", true },
   { "boolean", false }
 }
 ( true )
@@ -744,7 +744,7 @@ TEST
 { "disjunction",
   { "unary", "not",
     { "string", "foo" }
-  }, "or",
+  },
   { "unary", "not",
     { "number", 1 }
   }
@@ -766,7 +766,7 @@ TEST
       { "number", 3 }, "-",
       { "number", 4 }
     }
-  }, "and",
+  },
   { "comparison",
     { "number", 5 }, "<",
     { "number", 6 }
@@ -786,9 +786,9 @@ TEST
       { "number", 2 }
     }, ">",
     { "number", 3 }
-  }, "or",
+  },
   { "conjunction",
-    { "number", 4 }, "and",
+    { "number", 4 },
     { "number", 5 }
   }
 }
@@ -804,7 +804,7 @@ TEST
     { "variable", "e" },
     { "sum",
       { "disjunction",
-        { "variable", "e" }, "or",
+        { "variable", "e" },
         { "number", 0 }
       }, "+",
       { "number", 1 }
@@ -823,7 +823,7 @@ TEST
     { "variable", "e" },
     { "sum",
       { "disjunction",
-        { "variable", "e" }, "or",
+        { "variable", "e" },
         { "number", 0 }
       }, "+",
       { "number", 1 }
@@ -842,7 +842,7 @@ TEST
     { "variable", "e" },
     { "sum",
       { "disjunction",
-        { "variable", "e" }, "or",
+        { "variable", "e" },
         { "number", 0 }
       }, "+",
       { "number", 1 }
@@ -863,7 +863,7 @@ TEST
       { "comparison",
         { "variable", "e" }, ">=",
         { "number", 3 }
-      }, "and",
+      },
       { "number", 4 }
     }
   }
@@ -881,7 +881,7 @@ TEST
     { "disjunction",
       { "unary", "not",
         { "number", 4 }
-      }, "or",
+      },
       { "sum",
         { "variable", "e" }, "+",
         { "number", 1 }
@@ -1387,7 +1387,7 @@ TEST
               { "variable", "b" }
             }, "==",
             { "number", 4 }
-          }, "or",
+          },
           { "comparison",
             { "product",
               { "variable", "a" }, "/",
@@ -1683,7 +1683,7 @@ TEST
   { "comparison",
     { "variable", "x" }, "==",
     { "variable", "nil" }
-  }, "and",
+  },
   { "comparison",
     { "variable", "y" }, "==",
     { "variable", "nil" }
@@ -1707,7 +1707,7 @@ TEST
     { "comparison",
       { "variable", "x" }, "==",
       { "variable", "nil" }
-    }, "and",
+    },
     { "comparison",
       { "variable", "y" }, "==",
       { "variable", "nil" }
@@ -1873,7 +1873,7 @@ TEST
         { "assignment",
           { "variable", "c" },
           { "disjunction",
-            { "variable", "c" }, "or",
+            { "variable", "c" },
             { "number", 3 }
           }
         },
