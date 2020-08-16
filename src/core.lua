@@ -56,13 +56,12 @@ local function parse()
 			local assign = {"assignment", "local", ast[2], ast[3]}
 			local test = {"comparison", ast[2], "<=", ast[4]}
 			local inc = {"assignment", ast[2], {"sum", ast[2], "+", {"number", 1}}}
-			local body = ast[6]
+			local body = ast[5]
 			table.insert(body, inc)
 			return {
 				"do", {
-					"block", assign, {"while", test, "do", body, "end"}
-				},
-				"end"
+					"block", assign, {"while", test, body}
+				}
 			}
 		end
 		return ast
@@ -178,27 +177,27 @@ local function parse()
 			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
 			(K "elseif" * V "expression" * K "then" * (V "block" + V "expression")) ^ 0 *
 			(K "else" * (V "block" + V "expression")) ^ -1 *
-			K "end"
+			skip "end"
 		),
 
 		while_loop = Ct (
-			K "while" * V "expression" * K "do" * V "block" * K "end"
+			K "while" * V "expression" * skip "do" * V "block" * skip "end"
 		),
 
 		for_loop = Ct (
 			K "for" * V "variable" * skip "=" *
 			V "expression" * skip "," * V "expression" *
-			K "do" * V "block" * K "end"
+			skip "do" * V "block" * skip "end"
 		) / desugar,
 
 		do_block = Ct (
-			K "do" * V "block" * K "end"
+			K "do" * V "block" * skip "end"
 		),
 
 		function_def = Ct (
 			K "function" * V "variable" ^ -1 *
 			skip "(" * V "params" ^ -1 * skip ")" *
-			(V "block" + V "expression") * K "end"
+			(V "block" + V "expression") * skip "end"
 		) / desugar,
 
 		params = Ct (
@@ -300,13 +299,12 @@ local function eval(ast, env)
 			elseif ast[i] == "else" then
 				return eval(ast[i+1], Env(env))
 			else
-				assert(ast[i] == "end")
 				return nil
 			end
 		end
 	elseif ast[1] == "while" then
 		while eval(ast[2], env) do
-			eval(ast[4], Env(env))
+			eval(ast[3], Env(env))
 		end
 		return nil
 	elseif ast[1] == "do" then
@@ -327,8 +325,8 @@ local function eval(ast, env)
 		end
 	elseif ast[1] == "function" then
 		return function (...)
-			local params = #ast == 4 and slice(ast[2], 2) or {}
-			local body = ast[#ast-1]
+			local params = #ast == 3 and slice(ast[2], 2) or {}
+			local body = ast[#ast]
 			local args = {...}
 			local scope = Env(env)
 			for i = 1, #params do

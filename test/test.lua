@@ -920,8 +920,7 @@ TEST
       { "variable", "a" }, ">",
       { "number", 0 }
     }, "then",
-    { "boolean", true },
-    "end"
+    { "boolean", true }
   }
 }
 ( true )
@@ -937,8 +936,7 @@ TEST
       { "variable", "a" }, "<",
       { "number", 0 }
     }, "then",
-    { "boolean", true },
-    "end"
+    { "boolean", true }
   }
 }
 ( nil )
@@ -956,8 +954,7 @@ TEST
     }, "then",
     { "boolean", true },
     "else",
-    { "boolean", false },
-    "end"
+    { "boolean", false }
   }
 }
 ( true )
@@ -975,8 +972,7 @@ TEST
     }, "then",
     { "boolean", true },
     "else",
-    { "boolean", false },
-    "end"
+    { "boolean", false }
   }
 }
 ( false )
@@ -997,7 +993,7 @@ TEST
         { "variable", "x" },
         { "number", 1 }
       }
-    }, "end"
+    }
   }
 }
 ( 1 )
@@ -1024,7 +1020,7 @@ TEST
         { "variable", "x" },
         { "number", 2 }
       }
-    }, "end"
+    }
   }
 }
 ( 2 )
@@ -1044,7 +1040,7 @@ TEST
         { "variable", "a" },
         { "number", 3 }
       }
-    }, "end"
+    }
   }
 }
 ( 3 )
@@ -1116,11 +1112,11 @@ TEST
                 { "variable", "a" },
                 { "number", 10 }
               }
-            }, "end"
+            }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   }
 }
 ( 6 )
@@ -1179,7 +1175,7 @@ TEST
         { "variable", "a" },
         { "number", 10 }
       }
-    }, "end"
+    }
   }
 }
 ( 10 )
@@ -1203,8 +1199,7 @@ TEST
     "elseif",
     { "boolean", false },
     "then",
-    { "number", 3 },
-    "end"
+    { "number", 3 }
   }
 }
 ( nil )
@@ -1219,7 +1214,7 @@ TEST
     { "comparison",
       { "variable", "a" }, ">",
       { "number", 1 }
-    }, "do",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1228,7 +1223,7 @@ TEST
           { "number", 1 }
         }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1243,7 +1238,7 @@ TEST
     { "comparison",
       { "variable", "b" }, "<",
       { "number", 10 }
-    }, "do",
+    },
     { "block",
       { "assignment",
         { "variable", "b" },
@@ -1252,7 +1247,7 @@ TEST
           { "variable", "a" }
         }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1270,7 +1265,7 @@ TEST
         { "variable", "b" }, "-",
         { "number", 1 }
       }
-    }, "do",
+    },
     { "block",
       { "assignment",
         { "variable", "b" },
@@ -1279,7 +1274,7 @@ TEST
           { "number", 1 }
         }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1297,13 +1292,13 @@ TEST
         { "variable", "b" }, "+",
         { "number", 1 }
       }
-    }, "do",
+    },
     { "block",
       { "assignment",
         { "variable", "b" },
         { "boolean", false }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1340,7 +1335,7 @@ TEST
             { "variable", "b" }
           }, "<",
           { "number", 10 }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1349,9 +1344,9 @@ TEST
               { "number", 2 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   },
   { "sum",
     { "variable", "a" }, "+",
@@ -1377,7 +1372,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "!=",
       { "number", 1 }
-    }, "do",
+    },
     { "block",
       { "if",
         { "disjunction",
@@ -1404,7 +1399,7 @@ TEST
               { "variable", "b" }
             }
           }
-        }, "end"
+        }
       },
       { "assignment",
         { "variable", "a" },
@@ -1413,7 +1408,7 @@ TEST
           { "number", 1 }
         }
       }
-    }, "end"
+    }
   },
   { "sum",
     { "variable", "a" }, "+",
@@ -1439,7 +1434,7 @@ TEST
         { "comparison",
           { "variable", "i" }, "<=",
           { "number", 1 }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1455,9 +1450,9 @@ TEST
               { "number", 1 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1479,7 +1474,7 @@ TEST
         { "comparison",
           { "variable", "i" }, "<=",
           { "number", 2 }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1495,9 +1490,9 @@ TEST
               { "number", 1 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1519,7 +1514,7 @@ TEST
         { "comparison",
           { "variable", "i" }, "<=",
           { "number", 3 }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1535,9 +1530,9 @@ TEST
               { "number", 1 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1563,7 +1558,7 @@ TEST
           { "unary", "-",
             { "number", 4 }
           }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1579,9 +1574,9 @@ TEST
               { "number", 1 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   }
 }
 ( nil )
@@ -1606,7 +1601,7 @@ TEST
         { "comparison",
           { "variable", "i" }, "<=",
           { "number", 4 }
-        }, "do",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1622,9 +1617,9 @@ TEST
               { "number", 1 }
             }
           }
-        }, "end"
+        }
       }
-    }, "end"
+    }
   },
   { "assignment",
     { "variable", "a" },
@@ -1666,10 +1661,9 @@ TEST
         }, "then",
         { "boolean", true },
         "else",
-        { "boolean", false },
-        "end"
+        { "boolean", false }
       }
-    }, "end"
+    }
   }
 }
 ( false )
@@ -1732,7 +1726,7 @@ TEST
       { "sum",
         { "variable", "a" }, "+",
         { "number", 1 }
-      }, "end"
+      }
     }
   },
   { "call",
@@ -1762,7 +1756,7 @@ TEST
             { "number", 1 }
           }
         }
-      }, "end"
+      }
     }
   },
   { "call",
@@ -1784,7 +1778,7 @@ TEST
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
-    }, "end"
+    }
   }
 }
 ( 4 )
@@ -1824,7 +1818,7 @@ TEST
             { "variable", "c" }
           }
         }
-      }, "end"
+      }
     }
   },
   { "call",
@@ -1846,7 +1840,7 @@ TEST
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
-    }, "end"
+    }
   }
 }
 ( 4 )
@@ -1884,7 +1878,7 @@ TEST
             { "variable", "c" }
           }
         }
-      }, "end"
+      }
     }
   },
   { "call",
@@ -1927,7 +1921,7 @@ TEST
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
-    }, "end"
+    }
   }
 }
 ( 4 )
@@ -1962,7 +1956,7 @@ TEST
                 { "comparison",
                   { "variable", "a" }, "<",
                   { "number", 10 }
-                }, "do",
+                },
                 { "block",
                   { "assignment",
                     { "variable", "a" },
@@ -1971,7 +1965,7 @@ TEST
                       { "number", 1 }
                     }
                   }
-                }, "end"
+                }
               },
               { "return",
                 { "sum",
@@ -1979,10 +1973,10 @@ TEST
                   { "variable", "b" }
                 }
               }
-            }, "end"
+            }
           }
         }
-      }, "end"
+      }
     }
   },
   { "assignment",
