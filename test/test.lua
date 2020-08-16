@@ -919,7 +919,7 @@ TEST
     { "comparison",
       { "variable", "a" }, ">",
       { "number", 0 }
-    }, "then",
+    },
     { "boolean", true }
   }
 }
@@ -935,7 +935,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "<",
       { "number", 0 }
-    }, "then",
+    },
     { "boolean", true }
   }
 }
@@ -951,7 +951,7 @@ TEST
     { "comparison",
       { "variable", "a" }, ">",
       { "number", 0 }
-    }, "then",
+    },
     { "boolean", true },
     "else",
     { "boolean", false }
@@ -969,7 +969,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "<",
       { "number", 0 }
-    }, "then",
+    },
     { "boolean", true },
     "else",
     { "boolean", false }
@@ -987,7 +987,7 @@ TEST
     { "comparison",
       { "variable", "a" }, ">",
       { "number", 0 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "x" },
@@ -1008,7 +1008,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "<",
       { "number", 0 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "x" },
@@ -1034,7 +1034,7 @@ TEST
   { "if",
     { "unary", "not",
       { "variable", "x" }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1067,7 +1067,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "==",
       { "number", 1 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1082,7 +1082,7 @@ TEST
         { "comparison",
           { "variable", "a" }, "==",
           { "number", 2 }
-        }, "then",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1097,7 +1097,7 @@ TEST
             { "comparison",
               { "variable", "a" }, "==",
               { "number", 3 }
-            }, "then",
+            },
             { "block",
               { "assignment",
                 { "variable", "a" },
@@ -1134,7 +1134,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "==",
       { "number", 3 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1147,7 +1147,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "==",
       { "number", 4 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1160,7 +1160,7 @@ TEST
     { "comparison",
       { "variable", "a" }, "==",
       { "number", 5 }
-    }, "then",
+    },
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1190,15 +1190,12 @@ TEST
 { "block",
   { "if",
     { "boolean", false },
-    "then",
     { "number", 1 },
     "elseif",
     { "boolean", false },
-    "then",
     { "number", 2 },
     "elseif",
     { "boolean", false },
-    "then",
     { "number", 3 }
   }
 }
@@ -1318,7 +1315,6 @@ TEST
 { "block",
   { "if",
     { "boolean", true },
-    "then",
     { "block",
       { "assignment",
         { "variable", "a" },
@@ -1390,7 +1386,7 @@ TEST
             }, "==",
             { "number", 2 }
           }
-        }, "then",
+        },
         { "block",
           { "assignment",
             { "variable", "a" },
@@ -1658,7 +1654,7 @@ TEST
         { "comparison",
           { "variable", "x" }, "==",
           { "variable", "y" }
-        }, "then",
+        },
         { "boolean", true },
         "else",
         { "boolean", false }
@@ -1774,7 +1770,6 @@ TEST
 { "block",
   { "if",
     { "variable", "c" },
-    "then",
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
@@ -1836,7 +1831,6 @@ TEST
 { "block",
   { "if",
     { "variable", "c" },
-    "then",
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }
@@ -1917,7 +1911,6 @@ TEST
 { "block",
   { "if",
     { "variable", "c" },
-    "then",
     { "sum",
       { "variable", "a" }, "+",
       { "variable", "b" }

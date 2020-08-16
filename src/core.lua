@@ -174,8 +174,8 @@ local function parse()
 		),
 
 		conditional = Ct (
-			K "if" * V "expression" * K "then" * (V "block" + V "expression") *
-			(K "elseif" * V "expression" * K "then" * (V "block" + V "expression")) ^ 0 *
+			K "if" * V "expression" * skip "then" * (V "block" + V "expression") *
+			(K "elseif" * V "expression" * skip "then" * (V "block" + V "expression")) ^ 0 *
 			(K "else" * (V "block" + V "expression")) ^ -1 *
 			skip "end"
 		),
@@ -289,12 +289,12 @@ local function eval(ast, env)
 		return a
 	elseif ast[1] == "if" then
 		if eval(ast[2], env) then
-			return eval(ast[4], Env(env))
+			return eval(ast[3], Env(env))
 		end
-		for i = 5, #ast, 4 do
+		for i = 4, #ast, 3 do
 			if ast[i] == "elseif" then
 				if eval(ast[i+1], env) then
-					return eval(ast[i+3], Env(env))
+					return eval(ast[i+2], Env(env))
 				end
 			elseif ast[i] == "else" then
 				return eval(ast[i+1], Env(env))
