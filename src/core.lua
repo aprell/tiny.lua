@@ -347,24 +347,7 @@ local function eval(ast, env)
 	end
 end
 
-local function repl(prompt)
-	prompt = prompt or "tiny> "
-	local parse = parse()
-	while true do
-		io.write(prompt)
-		local inp = io.read()
-		if not inp then io.write("\n"); break end
-		if #inp > 0 then
-			local ok, err = pcall(function ()
-				print(eval(parse:match(inp)))
-			end)
-			if not ok then print(err) end
-		end
-	end
-end
-
 return {
 	parse = parse,
-	eval = eval,
-	repl = repl
+	eval = eval
 }

@@ -5,7 +5,21 @@ package.path = "src/?.lua;" .. package.path
 local core = require "core"
 local parse = core.parse()
 local eval = core.eval
-local repl = core.repl
+
+local function repl(prompt)
+	prompt = prompt or "tiny> "
+	while true do
+		io.write(prompt)
+		local inp = io.read()
+		if not inp then io.write("\n"); break end
+		if #inp > 0 then
+			local ok, err = pcall(function ()
+				print(eval(parse:match(inp)))
+			end)
+			if not ok then print(err) end
+		end
+	end
+end
 
 if #arg > 0 then
 	if arg[1]:lower() == "-dump-ast" then
