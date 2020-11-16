@@ -25,8 +25,7 @@ TEST
 [[
     1
 ]]
-{ "number", 1 }
-( 1 )
+{ "number", 1 } ( 1 )
 
 TEST
 ----
@@ -35,16 +34,14 @@ TEST
 ]]
 { "unary", "-",
   { "number", 2 }
-}
-( -2 )
+} ( -2 )
 
 TEST
 ----
 [[
     3.14
 ]]
-{ "number", 3.14 }
-( 3.14 )
+{ "number", 3.14 } ( 3.14 )
 
 TEST
 ----
@@ -53,48 +50,42 @@ TEST
 ]]
 { "unary", "-",
   { "number", 4.50 }
-}
-( -4.50 )
+} ( -4.50 )
 
 TEST
 ----
 [[
     "foo"
 ]]
-{ "string", "foo" }
-( "foo" )
+{ "string", "foo" } ( "foo" )
 
 TEST
 ----
 [[
     "foo bar"
 ]]
-{ "string", "foo bar" }
-( "foo bar" )
+{ "string", "foo bar" } ( "foo bar" )
 
 TEST
 ----
 [[
     "tiny.lua"
 ]]
-{ "string", "tiny.lua" }
-( "tiny.lua" )
+{ "string", "tiny.lua" } ( "tiny.lua" )
 
 TEST
 ----
 [[
     true
 ]]
-{ "boolean", true }
-( true )
+{ "boolean", true } ( true )
 
 TEST
 ----
 [[
     false
 ]]
-{ "boolean", false }
-( false )
+{ "boolean", false } ( false )
 
 TEST
 ----
@@ -104,8 +95,7 @@ TEST
 { "sum",
   { "number", 1 }, "+",
   { "number", 2 }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -115,8 +105,7 @@ TEST
 { "sum",
   { "number", 1 }, "-",
   { "number", 2 }
-}
-( -1 )
+} ( -1 )
 
 TEST
 ----
@@ -126,8 +115,7 @@ TEST
 { "product",
   { "number", 1 }, "*",
   { "number", 2 }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -137,8 +125,7 @@ TEST
 { "product",
   { "number", 1 }, "/",
   { "number", 2 }
-}
-( 0.5 )
+} ( 0.5 )
 
 TEST
 ----
@@ -149,8 +136,7 @@ TEST
   { "number", 1 }, "+",
   { "number", 2 }, "+",
   { "number", 3 }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -161,8 +147,7 @@ TEST
   { "number", 1 }, "+",
   { "number", 2 }, "-",
   { "number", 3 }
-}
-( 0 )
+} ( 0 )
 
 TEST
 ----
@@ -175,8 +160,7 @@ TEST
     { "number", 2 }, "*",
     { "number", 3 }
   }
-}
-( 7 )
+} ( 7 )
 
 TEST
 ----
@@ -189,8 +173,7 @@ TEST
     { "number", 2 }
   }, "*",
   { "number", 3 }
-}
-( 9 )
+} ( 9 )
 
 TEST
 ----
@@ -203,8 +186,7 @@ TEST
     { "number", 2 }
   }, "/",
   { "number", 3 }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -218,8 +200,7 @@ TEST
     { "number", 3 }
   }, "+",
   { "number", 4 }
-}
-( 11 )
+} ( 11 )
 
 TEST
 ----
@@ -235,8 +216,7 @@ TEST
     { "number", 3 }, "+",
     { "number", 4 }
   }
-}
-( 21 )
+} ( 21 )
 
 TEST
 ----
@@ -254,8 +234,7 @@ TEST
     }, "+",
     { "number", 4 }
   }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -266,8 +245,7 @@ TEST
   { "unary", "-",
     { "number", 1 }
   }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -283,8 +261,7 @@ TEST
     }, "+",
     { "number", 2 }
   }
-}
-( -3 )
+} ( -3 )
 
 TEST
 ----
@@ -302,8 +279,7 @@ TEST
       { "number", 1 }
     }
   }
-}
-( -2 )
+} ( -2 )
 
 TEST
 ----
@@ -323,8 +299,7 @@ TEST
   { "unary", "-",
     { "number", 3 }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -346,8 +321,7 @@ TEST
   { "unary", "-",
     { "number", 3 }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -357,8 +331,7 @@ TEST
 { "concatenation",
   { "string", "foo" },
   { "string", "bar" }
-}
-( "foobar" )
+} ( "foobar" )
 
 TEST
 ----
@@ -385,8 +358,7 @@ TEST
   },
   { "string", ", " },
   { "string", "Go!" }
-}
-( "3, 2, 1, Go!" )
+} ( "3, 2, 1, Go!" )
 
 TEST
 ----
@@ -396,8 +368,7 @@ TEST
 { "comparison",
   { "number", 1 }, "==",
   { "number", 1 }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -407,8 +378,7 @@ TEST
 { "comparison",
   { "number", 2 }, "!=",
   { "number", 3 }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -424,8 +394,7 @@ TEST
     { "number", 2 }, "+",
     { "number", 3 }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -441,8 +410,7 @@ TEST
     { "number", 1 }, "+",
     { "number", 2 }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -452,8 +420,7 @@ TEST
 { "comparison",
   { "string", "foo" }, ">",
   { "string", "bar" }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -463,8 +430,7 @@ TEST
 { "comparison",
   { "string", "foo" }, "<",
   { "string", "bar" }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -474,16 +440,14 @@ TEST
 { "comparison",
   { "string", "true" }, "!=",
   { "string", "false" }
-}
-( true )
+} ( true )
 
 TEST
 ----
 [[
     a
 ]]
-{ "variable", "a" }
-( nil )
+{ "variable", "a" } ( nil )
 
 TEST
 ----
@@ -495,8 +459,7 @@ TEST
     { "variable", "a" },
     { "number", 1 }
   }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -508,8 +471,7 @@ TEST
     { "variable", "b" },
     { "number", 2 }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -524,8 +486,7 @@ TEST
       { "variable", "b" }
     }
   }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -540,8 +501,7 @@ TEST
       { "number", 2 }
     }
   }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -562,8 +522,7 @@ TEST
       }
     }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -578,8 +537,7 @@ TEST
       { "string", "tiny" }
     }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -606,8 +564,7 @@ TEST
       { "variable", "a" }
     }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -631,8 +588,7 @@ TEST
       { "number", 0 }
     }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -642,8 +598,7 @@ TEST
 { "conjunction",
   { "number", 1 },
   { "number", 2 }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -656,8 +611,7 @@ TEST
     { "number", 2 }
   },
   { "number", 3 }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -667,8 +621,7 @@ TEST
 { "disjunction",
   { "string", "foo" },
   { "string", "bar" }
-}
-( "foo" )
+} ( "foo" )
 
 TEST
 ----
@@ -678,8 +631,7 @@ TEST
 { "conjunction",
   { "boolean", true },
   { "boolean", false }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -689,8 +641,7 @@ TEST
 { "disjunction",
   { "boolean", true },
   { "boolean", false }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -699,8 +650,7 @@ TEST
 ]]
 { "unary", "not",
   { "boolean", true }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -709,8 +659,7 @@ TEST
 ]]
 { "unary", "not",
   { "boolean", false }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -721,8 +670,7 @@ TEST
   { "unary", "not",
     { "boolean", false }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -733,8 +681,7 @@ TEST
   { "unary", "not",
     { "boolean", true }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -748,8 +695,7 @@ TEST
   { "unary", "not",
     { "number", 1 }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -771,8 +717,7 @@ TEST
     { "number", 5 }, "<",
     { "number", 6 }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -791,8 +736,7 @@ TEST
     { "number", 4 },
     { "number", 5 }
   }
-}
-( 5 )
+} ( 5 )
 
 TEST
 ----
@@ -810,8 +754,7 @@ TEST
       { "number", 1 }
     }
   }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -829,8 +772,7 @@ TEST
       { "number", 1 }
     }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -848,8 +790,7 @@ TEST
       { "number", 1 }
     }
   }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -867,8 +808,7 @@ TEST
       { "number", 4 }
     }
   }
-}
-( 4 )
+} ( 4 )
 
 TEST
 ----
@@ -888,8 +828,7 @@ TEST
       }
     }
   }
-}
-( 5 )
+} ( 5 )
 
 TEST
 ----
@@ -906,8 +845,7 @@ TEST
     { "variable", "b" },
     { "number", 2 }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -922,8 +860,7 @@ TEST
     },
     { "boolean", true }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -938,8 +875,7 @@ TEST
     },
     { "boolean", true }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -956,8 +892,7 @@ TEST
     "else",
     { "boolean", false }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -974,8 +909,7 @@ TEST
     "else",
     { "boolean", false }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -995,8 +929,7 @@ TEST
       }
     }
   }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -1022,8 +955,7 @@ TEST
       }
     }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -1042,8 +974,7 @@ TEST
       }
     }
   }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -1118,8 +1049,7 @@ TEST
       }
     }
   }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -1177,8 +1107,7 @@ TEST
       }
     }
   }
-}
-( 10 )
+} ( 10 )
 
 TEST
 ----
@@ -1198,8 +1127,7 @@ TEST
     { "boolean", false },
     { "number", 3 }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1222,8 +1150,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1246,8 +1173,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1273,8 +1199,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1297,8 +1222,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1348,8 +1272,7 @@ TEST
     { "variable", "a" }, "+",
     { "variable", "b" }
   }
-}
-( 11 )
+} ( 11 )
 
 TEST
 ----
@@ -1410,8 +1333,7 @@ TEST
     { "variable", "a" }, "+",
     { "variable", "b" }
   }
-}
-( 3 )
+} ( 3 )
 
 TEST
 ----
@@ -1450,8 +1372,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1490,8 +1411,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1530,8 +1450,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1574,8 +1493,7 @@ TEST
       }
     }
   }
-}
-( nil )
+} ( nil )
 
 TEST
 ----
@@ -1624,8 +1542,7 @@ TEST
       { "number", 13 }
     }
   }
-}
-( 1 )
+} ( 1 )
 
 TEST
 ----
@@ -1661,8 +1578,7 @@ TEST
       }
     }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -1678,8 +1594,7 @@ TEST
     { "variable", "y" }, "==",
     { "variable", "nil" }
   }
-}
-( true )
+} ( true )
 
 TEST
 ----
@@ -1703,8 +1618,7 @@ TEST
       { "variable", "nil" }
     }
   }
-}
-( false )
+} ( false )
 
 TEST
 ----
@@ -1728,8 +1642,7 @@ TEST
   { "call",
     { "variable", "f" }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -1758,8 +1671,7 @@ TEST
   { "call",
     { "variable", "f" }
   }
-}
-( 2 )
+} ( 2 )
 
 TEST
 ----
@@ -1775,8 +1687,7 @@ TEST
       { "variable", "b" }
     }
   }
-}
-( 4 )
+} ( 4 )
 
 TEST
 ----
@@ -1819,8 +1730,7 @@ TEST
   { "call",
     { "variable", "f" }
   }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -1836,8 +1746,7 @@ TEST
       { "variable", "b" }
     }
   }
-}
-( 4 )
+} ( 4 )
 
 TEST
 ----
@@ -1883,8 +1792,7 @@ TEST
       { "number", 3 }
     }
   }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -1899,8 +1807,7 @@ TEST
       { "number", 2 }
     }
   }
-}
-( 6 )
+} ( 6 )
 
 TEST
 ----
@@ -1916,8 +1823,7 @@ TEST
       { "variable", "b" }
     }
   }
-}
-( 4 )
+} ( 4 )
 
 TEST
 ----
@@ -1981,8 +1887,7 @@ TEST
   { "call",
     { "variable", "a" }
   }
-}
-( 12 )
+} ( 12 )
 
 --------------
 check.report()
