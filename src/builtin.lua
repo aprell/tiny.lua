@@ -20,6 +20,6 @@ for sym, val in pairs {
 
 	["print"] = print,
 
-} do builtin:add(sym, val) end
+} do Env.add(builtin, sym, val) end
 
 return builtin

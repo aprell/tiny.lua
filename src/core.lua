@@ -233,16 +233,16 @@ local function eval(ast, env)
 		return ast[2]
 	elseif ast[1] == "variable" then
 		local var = ast[2]
-		return env:lookup(var)
+		return Env.lookup(env, var)
 	elseif ast[1] == "assignment" then
 		local var, val
 		if ast[2] == "local" then
 			var, val = ast[3][2], eval(ast[4], env)
-			env:add(var, val)
+			Env.add(env, var, val)
 		else
 			var, val = ast[2][2], eval(ast[3], env)
-			if env:update(var, val) == nil then
-				env:add(var, val)
+			if Env.update(env, var, val) == nil then
+				Env.add(env, var, val)
 			end
 		end
 		return val
@@ -332,7 +332,7 @@ local function eval(ast, env)
 			for i = 1, #params do
 				assert(params[i][1] == "variable")
 				local var, val = params[i][2], args[i]
-				scope:add(var, val or nil)
+				Env.add(scope, var, val or nil)
 			end
 			return eval(body, scope)
 		end
