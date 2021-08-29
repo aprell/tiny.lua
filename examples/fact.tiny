@@ -1,14 +1,14 @@
 function fact_it(n)
-	local a = 1
-	for i = 2, n do
-		a = a * i
-	end
-	return a
+    local a = 1
+    for i = 2, n do
+        a = a * i
+    end
+    return a
 end
 
 function fact_rec(n)
-	if n == 0 then 1
-	else n * fact_rec(n-1) end
+    if n == 0 then 1
+    else n * fact_rec(n-1) end
 end
 
 print(fact_it(10) == fact_rec(10))
