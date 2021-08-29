@@ -155,7 +155,9 @@ local function parse()
 		) + V "atom",
 
 		atom =
-			-- function_call must come before variable
+			-- "function_call" must come before "variable", otherwise:
+			-- tiny> x + f()
+			-- [...]: attempt to perform arithmetic on a function value
 			V "literal" + V "function_call" + V "variable" +
 			skip "(" * V "expression" * skip ")",
 
