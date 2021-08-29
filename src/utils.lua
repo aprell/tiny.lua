@@ -1,5 +1,4 @@
 local utils = {}
-local _tostring = tostring
 local unpack = unpack or table.unpack
 
 -- Applies a function to every element of an array
@@ -16,27 +15,6 @@ end
 -- Shares metatable with original array
 function utils.slice(t, i, j)
 	return setmetatable({unpack(t, i, j)}, getmetatable(t))
-end
-
--- Overrides tostring to print table contents
-function tostring(n, indent)
-	indent = indent or ""
-	if type(n) == "table" then
-		local mt = getmetatable(n)
-		if mt ~= nil and mt.__tostring ~= nil then
-			return indent .. mt.__tostring(n)
-		else
-			return ("%s{\n%s\n%s}"):format(
-				indent,
-				table.concat(utils.map(n, function (m)
-					return tostring(m, indent .. string.rep(" ", 4))
-				end), ",\n"),
-				indent
-			)
-		end
-	else
-		return indent .. _tostring(n)
-	end
 end
 
 -- Raises an error with message err_msg

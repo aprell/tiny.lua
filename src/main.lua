@@ -2,6 +2,8 @@
 
 package.path = "src/?.lua;" .. package.path
 
+require "tostring"
+
 local core = require "core"
 local parse = core.parse()
 local eval = core.eval
