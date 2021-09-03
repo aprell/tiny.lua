@@ -7,7 +7,7 @@ function tostring(n)
 		if mt ~= nil and mt.__tostring ~= nil then
 			return mt.__tostring(n)
 		else
-			return json.convert(n)
+			return _tostring(json(n))
 		end
 	else
 		return _tostring(n)

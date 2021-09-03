@@ -1,18 +1,13 @@
 {
   "block": [
     {
-      "call": [
-        {
-          "variable": "print"
-        },
-        {
-          "args": [
-            {
-              "string": "Hello, tiny!"
-            }
-          ]
-        }
-      ]
+      "call": {
+        "print": [
+          {
+            "string": "Hello, tiny!"
+          }
+        ]
+      }
     }
   ]
 }

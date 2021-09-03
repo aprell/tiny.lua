@@ -1,134 +1,112 @@
 {
   "block": [
     {
-      "assignment": [
-        {
-          "variable": "fact_it"
-        },
-        {
-          "function": [
-            {
-              "params": [
-                {
-                  "variable": "n"
-                }
-              ]
-            },
-            {
+      "assignment": {
+        "local": false,
+        "fact_it": {
+          "function": {
+            "params": [
+              {
+                "variable": "n"
+              }
+            ],
+            "body": {
               "block": [
                 {
-                  "assignment": [
-                    "local",
-                    {
-                      "variable": "a"
-                    },
-                    {
+                  "assignment": {
+                    "local": true,
+                    "a": {
                       "number": 1
                     }
-                  ]
+                  }
                 },
                 {
-                  "do": [
-                    {
-                      "block": [
-                        {
-                          "assignment": [
-                            "local",
-                            {
-                              "variable": "i"
-                            },
-                            {
-                              "number": 2
-                            }
-                          ]
-                        },
-                        {
-                          "while": [
-                            {
-                              "comparison": [
-                                {
-                                  "variable": "i"
-                                },
-                                "<=",
-                                {
-                                  "variable": "n"
-                                }
-                              ]
-                            },
-                            {
-                              "block": [
-                                {
-                                  "assignment": [
-                                    {
-                                      "variable": "a"
-                                    },
-                                    {
-                                      "product": [
-                                        {
-                                          "variable": "a"
-                                        },
-                                        "*",
-                                        {
-                                          "variable": "i"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "assignment": [
-                                    {
-                                      "variable": "i"
-                                    },
-                                    {
-                                      "sum": [
-                                        {
-                                          "variable": "i"
-                                        },
-                                        "+",
-                                        {
-                                          "number": 1
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                  "do": {
+                    "block": [
+                      {
+                        "assignment": {
+                          "local": true,
+                          "i": {
+                            "number": 2
+                          }
                         }
-                      ]
-                    }
-                  ]
+                      },
+                      {
+                        "while": [
+                          {
+                            "comparison": [
+                              {
+                                "variable": "i"
+                              },
+                              "<=",
+                              {
+                                "variable": "n"
+                              }
+                            ]
+                          },
+                          {
+                            "block": [
+                              {
+                                "assignment": {
+                                  "local": false,
+                                  "a": {
+                                    "product": [
+                                      {
+                                        "variable": "a"
+                                      },
+                                      "*",
+                                      {
+                                        "variable": "i"
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "assignment": {
+                                  "local": false,
+                                  "i": {
+                                    "sum": [
+                                      {
+                                        "variable": "i"
+                                      },
+                                      "+",
+                                      {
+                                        "number": 1
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 },
                 {
-                  "return": [
-                    {
-                      "variable": "a"
-                    }
-                  ]
+                  "return": {
+                    "variable": "a"
+                  }
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     },
     {
-      "assignment": [
-        {
-          "variable": "fact_rec"
-        },
-        {
-          "function": [
-            {
-              "params": [
-                {
-                  "variable": "n"
-                }
-              ]
-            },
-            {
+      "assignment": {
+        "local": false,
+        "fact_rec": {
+          "function": {
+            "params": [
+              {
+                "variable": "n"
+              }
+            ],
+            "body": {
               "block": [
                 {
                   "if": [
@@ -154,26 +132,21 @@
                         },
                         "*",
                         {
-                          "call": [
-                            {
-                              "variable": "fact_rec"
-                            },
-                            {
-                              "args": [
-                                {
-                                  "sum": [
-                                    {
-                                      "variable": "n"
-                                    },
-                                    "-",
-                                    {
-                                      "number": 1
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "call": {
+                            "fact_rec": [
+                              {
+                                "sum": [
+                                  {
+                                    "variable": "n"
+                                  },
+                                  "-",
+                                  {
+                                    "number": 1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
                         }
                       ]
                     }
@@ -181,53 +154,38 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     },
     {
-      "call": [
-        {
-          "variable": "print"
-        },
-        {
-          "args": [
-            {
-              "comparison": [
-                {
-                  "call": [
+      "call": {
+        "print": [
+          {
+            "comparison": [
+              {
+                "call": {
+                  "fact_it": [
                     {
-                      "variable": "fact_it"
-                    },
-                    {
-                      "args": [
-                        {
-                          "number": 10
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "==",
-                {
-                  "call": [
-                    {
-                      "variable": "fact_rec"
-                    },
-                    {
-                      "args": [
-                        {
-                          "number": 10
-                        }
-                      ]
+                      "number": 10
                     }
                   ]
                 }
-              ]
-            }
-          ]
-        }
-      ]
+              },
+              "==",
+              {
+                "call": {
+                  "fact_rec": [
+                    {
+                      "number": 10
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }
