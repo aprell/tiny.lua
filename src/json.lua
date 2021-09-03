@@ -1,16 +1,11 @@
+require "type"
+
 local utils = require "utils"
 local map, slice = utils.map, utils.slice
 local ordered_pairs = utils.ordered_pairs
 local json = {}
 
 local spaces = "  "
-
-local _type = type
-
-function type(x)
-	local t, mt = _type(x), getmetatable(x)
-	return mt and mt.__type or t
-end
 
 local function order_assignment(_, a, b)
 	if a == "local" or a < b and b ~= "local"
