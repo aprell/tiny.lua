@@ -1,42 +1,16 @@
 local utils = require "utils"
 local map, slice = utils.map, utils.slice
+local ordered_pairs = utils.ordered_pairs
 local json = {}
 
-local function ordered_pairs(t, cmp)
-	local keys = {}
-	for k in pairs(t) do
-		keys[#keys+1] = k
-	end
-
-	if cmp then
-		table.sort(keys, function (a, b) return cmp(t, a, b) end)
-	else
-		table.sort(keys)
-	end
-
-	local i = 0
-	return function ()
-		i = i + 1
-		if keys[i] ~= nil then
-			return keys[i], t[keys[i]]
-		end
-	end
-end
-
 local function order_assignment(_, a, b)
-	if a == "local" or a < b and b ~= "local" then
-		return true
-	else
-		return false
-	end
+	if a == "local" or a < b and b ~= "local"
+	then return true else return false end
 end
 
 local function order_function(_, a, b)
-	if a == "params" or a < b and b ~= "params" then
-		return true
-	else
-		return false
-	end
+	if a == "params" or a < b and b ~= "params"
+	then return true else return false end
 end
 
 local spaces = "  "

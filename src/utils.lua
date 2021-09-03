@@ -27,4 +27,25 @@ function utils.ismain()
 	return not debug.getinfo(4)
 end
 
+function utils.ordered_pairs(t, cmp)
+	local keys = {}
+	for k in pairs(t) do
+		keys[#keys+1] = k
+	end
+
+	if cmp then
+		table.sort(keys, function (a, b) return cmp(t, a, b) end)
+	else
+		table.sort(keys)
+	end
+
+	local i = 0
+	return function ()
+		i = i + 1
+		if keys[i] ~= nil then
+			return keys[i], t[keys[i]]
+		end
+	end
+end
+
 return utils
