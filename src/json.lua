@@ -3,6 +3,15 @@ local map, slice = utils.map, utils.slice
 local ordered_pairs = utils.ordered_pairs
 local json = {}
 
+local spaces = "  "
+
+local _type = type
+
+function type(x)
+	local t, mt = _type(x), getmetatable(x)
+	return mt and mt.__type or t
+end
+
 local function order_assignment(_, a, b)
 	if a == "local" or a < b and b ~= "local"
 	then return true else return false end
@@ -13,12 +22,9 @@ local function order_function(_, a, b)
 	then return true else return false end
 end
 
-local spaces = "  "
-
 function json.object_to_string(obj, indent)
 	indent = indent or ""
-	local t = {}
-	local f
+	local t = {}, f
 	if obj["local"] ~= nil then f = order_assignment end
 	if obj["params"] ~= nil then f = order_function end
 	for k, v in ordered_pairs(obj, f) do
@@ -38,9 +44,9 @@ end
 
 function json.to_string(t, indent)
 	indent = indent or ""
-	if type(t) == "table" and getmetatable(t).__type == "object" then
+	if type(t) == "object" then
 		return json.object_to_string(t, indent)
-	elseif type(t) == "table" and getmetatable(t).__type == "array" then
+	elseif type(t) == "array" then
 		return json.array_to_string(t, indent)
 	else
 		return t
