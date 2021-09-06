@@ -69,67 +69,33 @@ function json.array(t)
 	return setmetatable(t, array_mt)
 end
 
+local function json_object(t)
+	return json.object {
+		[t[1]] = convert(t[2])
+	}
+end
+
+local function json_array(t)
+	return json.array(map(t, convert))
+end
+
 json.convert = {}
 
-json.convert["number"] = function (t)
-	return json.object {
-		["number"] = t[2]
-	}
-end
+json.convert["number"] = json_object
 
-json.convert["boolean"] = function (t)
-	return json.object {
-		["boolean"] = t[2]
-	}
-end
+json.convert["boolean"] = json_object
 
-json.convert["string"] = function (t)
-	return json.object {
-		["string"] = ("%q"):format(t[2])
-	}
-end
+json.convert["string"] = json_object
 
-json.convert["variable"] = function (t)
-	return json.object {
-		["variable"] = ("%q"):format(t[2])
-	}
-end
+json.convert["variable"] = json_object
+
+json.convert["do"] = json_object
+
+json.convert["return"] = json_object
 
 json.convert["unary"] = function (t)
 	return json.object {
-		["unary"] = json.object {
-			[t[2]] = convert(t[3])
-		}
-	}
-end
-
-json.convert["binary"] = function (t)
-	return json.object {
-		[t[1]] = json.array(map(slice(t, 2), convert))
-	}
-end
-
-json.convert["block"] = function (t)
-	return json.object {
-		["block"] = json.array(map(slice(t, 2), convert))
-	}
-end
-
-json.convert["if"] = function (t)
-	return json.object {
-		["if"] = json.array(map(slice(t, 2), convert))
-	}
-end
-
-json.convert["while"] = function (t)
-	return json.object {
-		["while"] = json.array(map(slice(t, 2), convert))
-	}
-end
-
-json.convert["do"] = function (t)
-	return json.object {
-		["do"] = json.object(convert(t[2]))
+		["unary"] = json_object(slice(t, 2))
 	}
 end
 
@@ -163,7 +129,7 @@ json.convert["function"] = function (t)
 	end
 	return json.object {
 		["function"] = json.object {
-			["params"] = json.array(map(params, convert)),
+			["params"] = json_array(params),
 			["body"] = json.object(convert(body))
 		}
 	}
@@ -179,20 +145,20 @@ json.convert["call"] = function (t)
 	end
 	return json.object {
 		["call"] = json.object {
-			[fun] = json.array(map(args, convert))
+			[fun] = json_array(args)
 		}
 	}
 end
 
-json.convert["return"] = function (t)
+local function default(t)
 	return json.object {
-		["return"] = json.object(convert(t[2]))
+		[t[1]] = json_array(slice(t, 2))
 	}
 end
 
 setmetatable(json.convert, {
 	__index = function ()
-		return json.convert.binary
+		return default
 	end
 })
 
