@@ -7,21 +7,18 @@ local json = {}
 
 local spaces = "  "
 
-local function order_assignment(_, a, b)
-	if a == "local" or a < b and b ~= "local"
-	then return true else return false end
-end
-
-local function order_function(_, a, b)
-	if a == "params" or a < b and b ~= "params"
-	then return true else return false end
+local function first(s)
+	return function (_, a, b)
+		if a == s or a < b and b ~= s
+		then return true else return false end
+	end
 end
 
 function json.object_to_string(obj, indent)
 	indent = indent or ""
 	local t = {}, f
-	if obj["local"] ~= nil then f = order_assignment end
-	if obj["params"] ~= nil then f = order_function end
+	if obj["local"] ~= nil then f = first "local" end
+	if obj["params"] ~= nil then f = first "params" end
 	for k, v in ordered_pairs(obj, f) do
 		t[#t+1] = indent .. spaces .. ("%q: %s"):format(k, json.to_string(v, indent .. spaces))
 	end
@@ -48,14 +45,6 @@ function json.to_string(t, indent)
 	end
 end
 
-local function convert(t)
-	if type(t) == "table" then
-		return json.convert[t[1]](t)
-	else
-		return ("%q"):format(t)
-	end
-end
-
 local object_mt = {__tostring = json.object_to_string, __type = "object"}
 local array_mt = {__tostring = json.array_to_string, __type = "array"}
 
@@ -67,6 +56,14 @@ end
 function json.array(t)
 	t = t or {}
 	return setmetatable(t, array_mt)
+end
+
+local function convert(t)
+	if type(t) == "table" then
+		return json.convert(t)
+	else
+		return ("%q"):format(t)
+	end
 end
 
 local function json_object(t)
@@ -157,6 +154,10 @@ local function default(t)
 end
 
 setmetatable(json.convert, {
+	__call = function (_, t)
+		return json.convert[t[1]](t)
+	end,
+
 	__index = function ()
 		return default
 	end
