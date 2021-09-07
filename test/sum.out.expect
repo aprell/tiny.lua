@@ -1,0 +1,241 @@
+{
+  "block": [
+    {
+      "assignment": {
+        "local": false,
+        "sum": {
+          "function": {
+            "params": [
+              {
+                "variable": "n"
+              }
+            ],
+            "body": {
+              "block": [
+                {
+                  "if": [
+                    {
+                      "comparison": [
+                        {
+                          "variable": "n"
+                        },
+                        "<",
+                        {
+                          "number": 1
+                        }
+                      ]
+                    },
+                    {
+                      "block": [
+                        {
+                          "return": {
+                            "number": 0
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "assignment": {
+                    "local": true,
+                    "s": {
+                      "number": 1
+                    }
+                  }
+                },
+                {
+                  "do": {
+                    "block": [
+                      {
+                        "assignment": {
+                          "local": true,
+                          "i": {
+                            "number": 2
+                          }
+                        }
+                      },
+                      {
+                        "while": [
+                          {
+                            "comparison": [
+                              {
+                                "variable": "i"
+                              },
+                              "<=",
+                              {
+                                "variable": "n"
+                              }
+                            ]
+                          },
+                          {
+                            "block": [
+                              {
+                                "assignment": {
+                                  "local": false,
+                                  "s": {
+                                    "sum": [
+                                      {
+                                        "variable": "s"
+                                      },
+                                      "+",
+                                      {
+                                        "variable": "i"
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "assignment": {
+                                  "local": false,
+                                  "i": {
+                                    "sum": [
+                                      {
+                                        "variable": "i"
+                                      },
+                                      "+",
+                                      {
+                                        "number": 1
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "return": {
+                    "variable": "s"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "main": {
+          "function": {
+            "params": [
+
+            ],
+            "body": {
+              "block": [
+                {
+                  "call": {
+                    "write": [
+                      {
+                        "string": "The sum of numbers from 1 to "
+                      }
+                    ]
+                  }
+                },
+                {
+                  "assignment": {
+                    "local": false,
+                    "n": {
+                      "call": {
+                        "read": [
+                          {
+                            "string": "*n"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "assignment": {
+                    "local": false,
+                    "s": {
+                      "call": {
+                        "sum": [
+                          {
+                            "variable": "n"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "call": {
+                    "assert": [
+                      {
+                        "comparison": [
+                          {
+                            "variable": "s"
+                          },
+                          "==",
+                          {
+                            "product": [
+                              {
+                                "product": [
+                                  {
+                                    "variable": "n"
+                                  },
+                                  "*",
+                                  {
+                                    "sum": [
+                                      {
+                                        "variable": "n"
+                                      },
+                                      "+",
+                                      {
+                                        "number": 1
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              "/",
+                              {
+                                "number": 2
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "call": {
+                    "print": [
+                      {
+                        "concatenation": [
+                          {
+                            "string": "= "
+                          },
+                          {
+                            "variable": "s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "main": [
+
+        ]
+      }
+    }
+  ]
+}

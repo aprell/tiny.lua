@@ -1,0 +1,19 @@
+function sum(n)
+    if n < 1 then return 0 end
+    local s = 1
+    for i = 2, n do
+        s = s + i
+    end
+    return s
+end
+
+function main()
+    write("The sum of numbers from 1 to ")
+    n = read("*n")
+    s = sum(n)
+    assert(s == (n * (n + 1)) / 2)
+    -- FIXME
+    print(("= " .. s))
+end
+
+main()
