@@ -18,7 +18,10 @@ for sym, val in pairs {
 
 	[".."] = function (a, b) return a .. b end,
 
-	["print"] = print,
+	["assert"] = assert,
+	["read"]   = io.read,
+	["write"]  = io.write,
+	["print"]  = print,
 
 } do Env.add(builtin, sym, val) end
 
