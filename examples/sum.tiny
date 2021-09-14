@@ -12,8 +12,7 @@ function main()
     n = read("*n")
     s = sum(n)
     assert(s == (n * (n + 1)) / 2)
-    -- FIXME
-    print(("= " .. s))
+    print("= " .. s)
 end
 
 main()
