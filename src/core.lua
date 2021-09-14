@@ -315,15 +315,15 @@ local function eval(ast, env)
 		for i = 2, #ast-1 do
 			local val = eval(ast[i], env)
 			if ast[i][1] == "return" then
-				return val
+				return error(val)
 			end
 		end
 		return eval(ast[#ast], env)
 	elseif ast[1] == "return" then
 		if ast[2] ~= nil then
-			return eval(ast[2], env)
+			return error(eval(ast[2], env))
 		else
-			return nil
+			return error(nil)
 		end
 	elseif ast[1] == "function" then
 		return function (...)
@@ -336,7 +336,10 @@ local function eval(ast, env)
 				local var, val = params[i][2], args[i]
 				Env.add(scope, var, val or nil)
 			end
-			return eval(body, scope)
+			local _, ret = pcall(function ()
+				return eval(body, scope)
+			end)
+			return ret
 		end
 	elseif ast[1] == "call" then
 		local fun = eval(ast[2], env) or raise "Undefined function"
