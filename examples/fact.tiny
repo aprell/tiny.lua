@@ -12,3 +12,5 @@ function fact_rec(n)
 end
 
 print(fact_it(10) == fact_rec(10))
+
+-- CHECK: true

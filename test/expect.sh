@@ -4,7 +4,7 @@
 set -eu
 set -o pipefail
 
-for test in "${1:-examples}"/*; do
+for test in "${1:-examples}"/*.tiny; do
     OUTPUT="test/$(basename "${test%.*}").out"
     ./tiny -dump-ast "$test" > "$OUTPUT.actual"
     if git diff --no-index "$OUTPUT.expect" "$OUTPUT.actual"; then
@@ -20,3 +20,8 @@ for test in "${1:-examples}"/*; do
         fi
     fi
 done
+
+if [ -n "$(command -v FileCheck)" ]; then
+    echo "Running FileChecks"
+    test/filecheck.sh
+fi
