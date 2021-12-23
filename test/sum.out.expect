@@ -3,7 +3,8 @@
     {
       "assignment": {
         "local": false,
-        "sum": {
+        "lhs": "sum",
+        "rhs": {
           "function": {
             "params": [
               {
@@ -39,7 +40,8 @@
                 {
                   "assignment": {
                     "local": true,
-                    "s": {
+                    "lhs": "s",
+                    "rhs": {
                       "number": 1
                     }
                   }
@@ -50,7 +52,8 @@
                       {
                         "assignment": {
                           "local": true,
-                          "i": {
+                          "lhs": "i",
+                          "rhs": {
                             "number": 2
                           }
                         }
@@ -73,7 +76,8 @@
                               {
                                 "assignment": {
                                   "local": false,
-                                  "s": {
+                                  "lhs": "s",
+                                  "rhs": {
                                     "sum": [
                                       {
                                         "variable": "s"
@@ -89,7 +93,8 @@
                               {
                                 "assignment": {
                                   "local": false,
-                                  "i": {
+                                  "lhs": "i",
+                                  "rhs": {
                                     "sum": [
                                       {
                                         "variable": "i"
@@ -123,7 +128,8 @@
     {
       "assignment": {
         "local": false,
-        "main": {
+        "lhs": "main",
+        "rhs": {
           "function": {
             "params": [
 
@@ -132,7 +138,8 @@
               "block": [
                 {
                   "call": {
-                    "write": [
+                    "func": "write",
+                    "args": [
                       {
                         "string": "The sum of numbers from 1 to "
                       }
@@ -142,9 +149,11 @@
                 {
                   "assignment": {
                     "local": false,
-                    "n": {
+                    "lhs": "n",
+                    "rhs": {
                       "call": {
-                        "read": [
+                        "func": "read",
+                        "args": [
                           {
                             "string": "*n"
                           }
@@ -156,9 +165,11 @@
                 {
                   "assignment": {
                     "local": false,
-                    "s": {
+                    "lhs": "s",
+                    "rhs": {
                       "call": {
-                        "sum": [
+                        "func": "sum",
+                        "args": [
                           {
                             "variable": "n"
                           }
@@ -169,7 +180,8 @@
                 },
                 {
                   "call": {
-                    "assert": [
+                    "func": "assert",
+                    "args": [
                       {
                         "comparison": [
                           {
@@ -210,7 +222,8 @@
                 },
                 {
                   "call": {
-                    "print": [
+                    "func": "print",
+                    "args": [
                       {
                         "concatenation": [
                           {
@@ -232,7 +245,8 @@
     },
     {
       "call": {
-        "main": [
+        "func": "main",
+        "args": [
 
         ]
       }

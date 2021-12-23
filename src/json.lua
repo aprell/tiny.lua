@@ -17,8 +17,9 @@ end
 function json.object_to_string(obj, indent)
 	indent = indent or ""
 	local t = {}, f
-	if obj["local"] ~= nil then f = first "local" end
-	if obj["params"] ~= nil then f = first "params" end
+	if obj["local"] ~= nil then f = first "local" end   -- assignment
+	if obj["params"] ~= nil then f = first "params" end -- function
+	if obj["args"] ~= nil then f = first "func" end     -- call
 	for k, v in ordered_pairs(obj, f) do
 		t[#t+1] = indent .. spaces .. ("%q: %s"):format(k, json.to_string(v, indent .. spaces))
 	end
@@ -110,7 +111,8 @@ json.convert["assignment"] = function (t)
 	return json.object {
 		["assignment"] = json.object {
 			["local"] = local_,
-			[lhs] = json.object(convert(rhs))
+			["lhs"] = convert(lhs),
+			["rhs"] = json.object(convert(rhs))
 		}
 	}
 end
@@ -133,8 +135,8 @@ json.convert["function"] = function (t)
 end
 
 json.convert["call"] = function (t)
-	local fun, args
-	fun = t[2][2]
+	local func, args
+	func = t[2][2]
 	if #t == 2 then
 		args = {}
 	else
@@ -142,7 +144,8 @@ json.convert["call"] = function (t)
 	end
 	return json.object {
 		["call"] = json.object {
-			[fun] = json_array(args)
+			["func"] = convert(func),
+			["args"] = json_array(args)
 		}
 	}
 end

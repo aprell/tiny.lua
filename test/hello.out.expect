@@ -2,7 +2,8 @@
   "block": [
     {
       "call": {
-        "print": [
+        "func": "print",
+        "args": [
           {
             "string": "Hello, tiny!"
           }

@@ -3,7 +3,8 @@
     {
       "assignment": {
         "local": false,
-        "fact_it": {
+        "lhs": "fact_it",
+        "rhs": {
           "function": {
             "params": [
               {
@@ -15,7 +16,8 @@
                 {
                   "assignment": {
                     "local": true,
-                    "a": {
+                    "lhs": "a",
+                    "rhs": {
                       "number": 1
                     }
                   }
@@ -26,7 +28,8 @@
                       {
                         "assignment": {
                           "local": true,
-                          "i": {
+                          "lhs": "i",
+                          "rhs": {
                             "number": 2
                           }
                         }
@@ -49,7 +52,8 @@
                               {
                                 "assignment": {
                                   "local": false,
-                                  "a": {
+                                  "lhs": "a",
+                                  "rhs": {
                                     "product": [
                                       {
                                         "variable": "a"
@@ -65,7 +69,8 @@
                               {
                                 "assignment": {
                                   "local": false,
-                                  "i": {
+                                  "lhs": "i",
+                                  "rhs": {
                                     "sum": [
                                       {
                                         "variable": "i"
@@ -99,7 +104,8 @@
     {
       "assignment": {
         "local": false,
-        "fact_rec": {
+        "lhs": "fact_rec",
+        "rhs": {
           "function": {
             "params": [
               {
@@ -133,7 +139,8 @@
                         "*",
                         {
                           "call": {
-                            "fact_rec": [
+                            "func": "fact_rec",
+                            "args": [
                               {
                                 "sum": [
                                   {
@@ -160,12 +167,14 @@
     },
     {
       "call": {
-        "print": [
+        "func": "print",
+        "args": [
           {
             "comparison": [
               {
                 "call": {
-                  "fact_it": [
+                  "func": "fact_it",
+                  "args": [
                     {
                       "number": 10
                     }
@@ -175,7 +184,8 @@
               "==",
               {
                 "call": {
-                  "fact_rec": [
+                  "func": "fact_rec",
+                  "args": [
                     {
                       "number": 10
                     }
