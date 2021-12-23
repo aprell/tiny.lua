@@ -27,7 +27,7 @@ function utils.ismain()
 	return not debug.getinfo(4)
 end
 
-local function keys(t)
+function utils.keys(t)
 	local ks = {}
 	for k in pairs(t) do
 		ks[#ks+1] = k
@@ -36,7 +36,7 @@ local function keys(t)
 end
 
 function utils.ordered_pairs(t, cmp)
-	local keys = keys(t)
+	local keys = utils.keys(t)
 
 	table.sort(keys, cmp and function (a, b) return cmp(t, a, b) end or nil)
 

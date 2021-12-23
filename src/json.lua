@@ -2,26 +2,16 @@ require "type"
 
 local utils = require "utils"
 local map, slice = utils.map, utils.slice
-local ordered_pairs = utils.ordered_pairs
+local keys = utils.keys
 local json = {}
 
 local spaces = "  "
 
-local function first(s)
-	return function (_, a, b)
-		if a == s or a < b and b ~= s
-		then return true else return false end
-	end
-end
-
 function json.object_to_string(obj, indent)
 	indent = indent or ""
-	local t = {}, f
-	if obj["local"] ~= nil then f = first "local" end   -- assignment
-	if obj["params"] ~= nil then f = first "params" end -- function
-	if obj["args"] ~= nil then f = first "func" end     -- call
-	for k, v in ordered_pairs(obj, f) do
-		t[#t+1] = indent .. spaces .. ("%q: %s"):format(k, json.to_string(v, indent .. spaces))
+	local t = {}
+	for _, k in ipairs(obj.__keys or keys(obj)) do
+		t[#t+1] = indent .. spaces .. ("%q: %s"):format(k, json.to_string(obj[k], indent .. spaces))
 	end
 	return ("{\n%s\n%s}"):format(table.concat(t, ",\n"), indent)
 end
@@ -112,7 +102,8 @@ json.convert["assignment"] = function (t)
 		["assignment"] = json.object {
 			["local"] = local_,
 			["lhs"] = convert(lhs),
-			["rhs"] = json.object(convert(rhs))
+			["rhs"] = json.object(convert(rhs)),
+			__keys = {"local", "lhs", "rhs"}
 		}
 	}
 end
@@ -129,7 +120,8 @@ json.convert["function"] = function (t)
 	return json.object {
 		["function"] = json.object {
 			["params"] = json_array(params),
-			["body"] = json.object(convert(body))
+			["body"] = json.object(convert(body)),
+			__keys = {"params", "body"}
 		}
 	}
 end
@@ -145,7 +137,8 @@ json.convert["call"] = function (t)
 	return json.object {
 		["call"] = json.object {
 			["func"] = convert(func),
-			["args"] = json_array(args)
+			["args"] = json_array(args),
+			__keys = {"func", "args"}
 		}
 	}
 end
