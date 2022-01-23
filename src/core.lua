@@ -31,6 +31,11 @@ local function parse()
 		return token(name * -(alphanum + P "_"))
 	end
 
+	-- Match list of ps
+	local function list(p)
+		return V (p) * (skip "," * V (p)) ^ 0
+	end
+
 	local function parse_error()
 		raise "parse error"
 	end
@@ -222,30 +227,25 @@ local function parse()
 		),
 
 		function_def = Ct (
-			K "function" * V "variable" ^ -1 *
-			skip "(" * V "params" ^ -1 * skip ")" *
+			K "function" * V "variable" ^ -1 * V "params" *
 			(V "block" + V "expression") * skip "end"
 		) / desugar,
 
-		params = Ct (
-			Cc "params" * V "variable" * (skip "," * V "variable") ^ 0
-		),
+		params =
+			skip "(" * Ct (Cc "params" * list "variable") ^ -1 * skip ")",
 
 		function_call = Ct (
-			Cc "call" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
+			Cc "call" * V "variable" * V "args"
 		),
 
 		-- "expression" must be surrounded by parentheses to sidestep the
 		-- problem of left recursion
 		computed_function_call = Ct (
-			Cc "computed_call" *
-			skip "(" * V "expression" * skip ")" *
-			skip "(" * V "args" ^ -1 * skip ")"
+			Cc "computed_call" * skip "(" * V "expression" * skip ")" * V "args"
 		) / desugar,
 
-		args = Ct (
-			Cc "args" * V "expression" * (skip "," * V "expression") ^ 0
-		),
+		args =
+			skip "(" * Ct (Cc "args" * list "expression") ^ -1 * skip ")",
 
 		return_stmt = Ct (
 			K "return" * V "expression" ^ -1
