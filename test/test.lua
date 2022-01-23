@@ -2,15 +2,13 @@
 
 package.path = "../src/?.lua;" .. package.path
 
+local parse = require "parse"
+local eval = require "eval"
 local check = require "check"
-local core = require "core"
-
-local parse = core.parse()
-local eval = core.eval
 
 local TEST = function (code)
 	return function (expected_ast)
-		local actual_ast = parse:match(code)
+		local actual_ast = parse(code)
 		if expected_ast ~= nil then
 			check.equal(actual_ast, expected_ast)
 		end

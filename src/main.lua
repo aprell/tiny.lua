@@ -4,9 +4,8 @@ package.path = "src/?.lua;" .. package.path
 
 require "tostring"
 
-local core = require "core"
-local parse = core.parse()
-local eval = core.eval
+local parse = require "parse"
+local eval = require "eval"
 
 local function repl(prompt)
 	prompt = prompt or "tiny> "
@@ -16,7 +15,7 @@ local function repl(prompt)
 		if not inp then io.write("\n"); break end
 		if #inp > 0 then
 			local ok, err = pcall(function ()
-				print(eval(parse:match(inp)))
+				print(eval(parse(inp)))
 			end)
 			if not ok then print(err) end
 		end
@@ -30,7 +29,7 @@ if #arg > 0 then
 	end
 	for i = 1, #arg do
 		local file = assert(io.open(arg[i]))
-		eval(parse:match(file:read("*all")))
+		eval(parse(file:read("*all")))
 		file:close()
 	end
 else
