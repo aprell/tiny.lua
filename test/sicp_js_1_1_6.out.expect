@@ -1,0 +1,155 @@
+{
+  "block": [
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "plus",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "a"
+              },
+              {
+                "variable": "b"
+              }
+            ],
+            "body": {
+              "sum": [
+                {
+                  "variable": "a"
+                },
+                "+",
+                {
+                  "variable": "b"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "minus",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "a"
+              },
+              {
+                "variable": "b"
+              }
+            ],
+            "body": {
+              "sum": [
+                {
+                  "variable": "a"
+                },
+                "-",
+                {
+                  "variable": "b"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "a_plus_abs_b",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "a"
+              },
+              {
+                "variable": "b"
+              }
+            ],
+            "body": {
+              "block": [
+                {
+                  "do": {
+                    "block": [
+                      {
+                        "assignment": {
+                          "local": true,
+                          "lhs": "%1",
+                          "rhs": {
+                            "if": [
+                              {
+                                "comparison": [
+                                  {
+                                    "variable": "b"
+                                  },
+                                  ">=",
+                                  {
+                                    "number": 0
+                                  }
+                                ]
+                              },
+                              {
+                                "variable": "plus"
+                              },
+                              "else",
+                              {
+                                "variable": "minus"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "call": {
+                          "func": "%1",
+                          "args": [
+                            {
+                              "variable": "a"
+                            },
+                            {
+                              "variable": "b"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "func": "print",
+        "args": [
+          {
+            "call": {
+              "func": "a_plus_abs_b",
+              "args": [
+                {
+                  "number": 5
+                },
+                {
+                  "unary": {
+                    "-": {
+                      "number": 4
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

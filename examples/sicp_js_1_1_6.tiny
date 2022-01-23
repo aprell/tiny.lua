@@ -1,0 +1,13 @@
+-- SICP JS 1.1.6
+
+function plus(a, b) a + b end
+
+function minus(a, b) a - b end
+
+function a_plus_abs_b(a, b)
+    (if b >= 0 then plus else minus end)(a, b)
+end
+
+print(a_plus_abs_b(5, -4))
+
+-- CHECK: 9

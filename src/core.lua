@@ -35,6 +35,14 @@ local function parse()
 		raise "parse error"
 	end
 
+	local function gen_tmp(base)
+		local num = 0
+		return function ()
+			num = num + 1
+			return base .. num
+		end
+	end
+
 	local function desugar(ast)
 		if ast[1] == "function" then
 			if ast[2][1] == "variable" then
@@ -61,6 +69,21 @@ local function parse()
 			return {
 				"do", {
 					"block", assign, {"while", test, body}
+				}
+			}
+		elseif ast[1] == "computed_call" then
+			-- Desugar: (expr)(...)
+			---------->
+			-- do
+			--     local %1 = expr
+			--     %1(...)
+			-- end
+			local tmp = {"variable", gen_tmp"%"()}
+			local assign = {"assignment", "local", tmp, ast[2]}
+			local call = {"call", tmp, ast[3]}
+			return {
+				"do", {
+					"block", assign, call
 				}
 			}
 		end
@@ -155,10 +178,11 @@ local function parse()
 		) + V "atom",
 
 		atom =
-			-- "function_call" must come before "variable", otherwise:
+			-- "function_call" and "computed_function_call" must come before
+			-- "variable", otherwise:
 			-- tiny> x + f()
 			-- [...]: attempt to perform arithmetic on a function value
-			V "literal" + V "function_call" + V "variable" +
+			V "literal" + V "function_call" + V "computed_function_call" + V "variable" +
 			skip "(" * V "expression" * skip ")",
 
 		statement =
@@ -169,6 +193,7 @@ local function parse()
 			V "do_block" +
 			V "function_def" +
 			V "function_call" +
+			V "computed_function_call" +
 			V "return_stmt",
 
 		assignment = Ct (
@@ -209,6 +234,14 @@ local function parse()
 		function_call = Ct (
 			Cc "call" * V "variable" * skip "(" * V "args" ^ -1 * skip ")"
 		),
+
+		-- "expression" must be surrounded by parentheses to sidestep the
+		-- problem of left recursion
+		computed_function_call = Ct (
+			Cc "computed_call" *
+			skip "(" * V "expression" * skip ")" *
+			skip "(" * V "args" ^ -1 * skip ")"
+		) / desugar,
 
 		args = Ct (
 			Cc "args" * V "expression" * (skip "," * V "expression") ^ 0
