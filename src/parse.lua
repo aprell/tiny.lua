@@ -50,13 +50,13 @@ local function desugar(ast)
 			local var = table.remove(ast, 2)
 			return {"assignment", var, ast}
 		end
-    elseif ast[1] == "local" and ast[2] == "function" then
-        assert(ast[3][1] == "variable")
-        -- Desugar: local function f() ... end
-        ----------> local f = function () ... end
-        table.remove(ast, 1)
-        local var = table.remove(ast, 2)
-        return {"assignment", "local", var, ast}
+	elseif ast[1] == "local" and ast[2] == "function" then
+		assert(ast[3][1] == "variable")
+		-- Desugar: local function f() ... end
+		----------> local f = function () ... end
+		table.remove(ast, 1)
+		local var = table.remove(ast, 2)
+		return {"assignment", "local", var, ast}
 	elseif ast[1] == "for" then
 		-- Desugar: for i = a, b do ... end
 		---------->
