@@ -1835,7 +1835,8 @@ TEST
             return a + b
         end
     end
-    a = f(); a()
+    a = f()
+    a()
 ]]
 { "block",
   { "assignment",
@@ -1886,6 +1887,47 @@ TEST
     { "variable", "a" }
   }
 } ( 12 )
+
+TEST
+----
+[[
+    function f()
+        local x = 1
+        local function g()
+            x + 1
+        end
+        g()
+    end
+    f()
+]]
+{ "block",
+  { "assignment",
+    { "variable", "f" },
+    { "function",
+      { "block",
+        { "assignment", "local",
+          { "variable", "x" },
+          { "number", 1 }
+        },
+        { "assignment", "local",
+          { "variable", "g" },
+          { "function",
+            { "sum",
+              { "variable", "x" }, "+",
+              { "number", 1 }
+            }
+          }
+        },
+        { "call",
+          { "variable", "g" }
+        }
+      }
+    }
+  },
+  { "call",
+    { "variable", "f" }
+  }
+} ( 2 )
 
 --------------
 check.report()
