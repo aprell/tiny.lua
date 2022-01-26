@@ -1,0 +1,37 @@
+-- SICP JS 1.1.8
+
+function abs(x)
+    if x >= 0 then x else -x end
+end
+
+function square(x)
+    x * x
+end
+
+function average(x, y)
+    (x + y) / 2
+end
+
+function sqrt(x)
+    local function is_good_enough(guess)
+        return abs(square(guess) - x) < 0.001
+    end
+
+    local function improve(guess)
+        return average(guess, x / guess)
+    end
+
+    local function sqrt_iter(guess)
+        if is_good_enough(guess) then
+            return guess
+        else
+            return sqrt_iter(improve(guess))
+        end
+    end
+
+    return sqrt_iter(1)
+end
+
+print(sqrt(5))
+
+-- CHECK: 2.2360688956434

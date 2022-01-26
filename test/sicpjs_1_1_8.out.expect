@@ -1,0 +1,322 @@
+{
+  "block": [
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "abs",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "x"
+              }
+            ],
+            "body": {
+              "block": [
+                {
+                  "if": [
+                    {
+                      "comparison": [
+                        {
+                          "variable": "x"
+                        },
+                        ">=",
+                        {
+                          "number": 0
+                        }
+                      ]
+                    },
+                    {
+                      "variable": "x"
+                    },
+                    "else",
+                    {
+                      "unary": {
+                        "-": {
+                          "variable": "x"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "square",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "x"
+              }
+            ],
+            "body": {
+              "product": [
+                {
+                  "variable": "x"
+                },
+                "*",
+                {
+                  "variable": "x"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "average",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "x"
+              },
+              {
+                "variable": "y"
+              }
+            ],
+            "body": {
+              "product": [
+                {
+                  "sum": [
+                    {
+                      "variable": "x"
+                    },
+                    "+",
+                    {
+                      "variable": "y"
+                    }
+                  ]
+                },
+                "/",
+                {
+                  "number": 2
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "assignment": {
+        "local": false,
+        "lhs": "sqrt",
+        "rhs": {
+          "function": {
+            "params": [
+              {
+                "variable": "x"
+              }
+            ],
+            "body": {
+              "block": [
+                {
+                  "assignment": {
+                    "local": true,
+                    "lhs": "is_good_enough",
+                    "rhs": {
+                      "function": {
+                        "params": [
+                          {
+                            "variable": "guess"
+                          }
+                        ],
+                        "body": {
+                          "block": [
+                            {
+                              "return": {
+                                "comparison": [
+                                  {
+                                    "call": {
+                                      "func": "abs",
+                                      "args": [
+                                        {
+                                          "sum": [
+                                            {
+                                              "call": {
+                                                "func": "square",
+                                                "args": [
+                                                  {
+                                                    "variable": "guess"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "-",
+                                            {
+                                              "variable": "x"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "<",
+                                  {
+                                    "number": 0.001
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "assignment": {
+                    "local": true,
+                    "lhs": "improve",
+                    "rhs": {
+                      "function": {
+                        "params": [
+                          {
+                            "variable": "guess"
+                          }
+                        ],
+                        "body": {
+                          "block": [
+                            {
+                              "return": {
+                                "call": {
+                                  "func": "average",
+                                  "args": [
+                                    {
+                                      "variable": "guess"
+                                    },
+                                    {
+                                      "product": [
+                                        {
+                                          "variable": "x"
+                                        },
+                                        "/",
+                                        {
+                                          "variable": "guess"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "assignment": {
+                    "local": true,
+                    "lhs": "sqrt_iter",
+                    "rhs": {
+                      "function": {
+                        "params": [
+                          {
+                            "variable": "guess"
+                          }
+                        ],
+                        "body": {
+                          "block": [
+                            {
+                              "if": [
+                                {
+                                  "call": {
+                                    "func": "is_good_enough",
+                                    "args": [
+                                      {
+                                        "variable": "guess"
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "block": [
+                                    {
+                                      "return": {
+                                        "variable": "guess"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "else",
+                                {
+                                  "block": [
+                                    {
+                                      "return": {
+                                        "call": {
+                                          "func": "sqrt_iter",
+                                          "args": [
+                                            {
+                                              "call": {
+                                                "func": "improve",
+                                                "args": [
+                                                  {
+                                                    "variable": "guess"
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "return": {
+                    "call": {
+                      "func": "sqrt_iter",
+                      "args": [
+                        {
+                          "number": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "call": {
+        "func": "print",
+        "args": [
+          {
+            "call": {
+              "func": "sqrt",
+              "args": [
+                {
+                  "number": 5
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
