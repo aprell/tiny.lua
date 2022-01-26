@@ -52,8 +52,10 @@ end
 local function convert(t)
 	if type(t) == "table" then
 		return json.convert(t)
-	else
+	elseif type(t) == "string" then
 		return ("%q"):format(t)
+	else
+		return tostring(t)
 	end
 end
 
