@@ -43,13 +43,11 @@ local function gen_tmp(base)
 end
 
 local function desugar(ast)
-    if ast[1] == "function" then
-        if ast[2][1] == "variable" then
-            -- Desugar: function f() ... end
-            ----------> f = function () ... end
-            local var = table.remove(ast, 2)
-            return {"assignment", var, ast}
-        end
+    if ast[1] == "function" and ast[2][1] == "variable" then
+        -- Desugar: function f() ... end
+        ----------> f = function () ... end
+        local var = table.remove(ast, 2)
+        return {"assignment", var, ast}
     elseif ast[1] == "local" and ast[2] == "function" then
         assert(ast[3][1] == "variable")
         -- Desugar: local function f() ... end
