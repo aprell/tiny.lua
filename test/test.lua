@@ -7,15 +7,15 @@ local eval = require "eval"
 local check = require "check"
 
 local TEST = function (code)
-	return function (expected_ast)
-		local actual_ast = parse(code)
-		if expected_ast ~= nil then
-			check.equal(actual_ast, expected_ast)
-		end
-		return function (expected_value)
-			check.equal(eval(actual_ast), expected_value)
-		end
-	end
+    return function (expected_ast)
+        local actual_ast = parse(code)
+        if expected_ast ~= nil then
+            check.equal(actual_ast, expected_ast)
+        end
+        return function (expected_value)
+            check.equal(eval(actual_ast), expected_value)
+        end
+    end
 end
 
 TEST
