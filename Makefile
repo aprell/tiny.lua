@@ -1,5 +1,5 @@
 test:
-	@cd test && ./test.lua
+	@test/test.lua
 	@echo "Running expect tests"
 	@test/expect.sh
 

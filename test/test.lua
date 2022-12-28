@@ -1,12 +1,12 @@
 #!/usr/bin/env lua
 
-package.path = "../src/?.lua;" .. package.path
+package.path = "src/?.lua;test/?.lua;" .. package.path
 
 local parse = require "parse"
 local eval = require "eval"
 local check = require "check"
 
-local TEST = function (code)
+local function TEST(code)
     return function (expected_ast)
         local actual_ast = parse(code)
         if expected_ast ~= nil then
@@ -1929,6 +1929,4 @@ TEST
   }
 } ( 2 )
 
---------------
-check.report()
---------------
+print(check.report())

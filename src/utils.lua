@@ -49,4 +49,27 @@ function utils.ordered_pairs(t, cmp)
     end
 end
 
+-- Returns true if a is a subset of b
+local function subset(a, b)
+    for k, v in pairs(a) do
+        if type(v) == "table" then
+            if type(b[k]) ~= "table" then
+                return false
+            elseif not subset(v, b[k]) then
+                return false
+            end
+        else
+            if b[k] ~= v then
+                return false
+            end
+        end
+    end
+    return true
+end
+
+-- Two tables a and b are equal if a is a subset of b and b is a subset of a
+function utils.table_equal(a, b)
+    return subset(a, b) and subset(b, a)
+end
+
 return utils
